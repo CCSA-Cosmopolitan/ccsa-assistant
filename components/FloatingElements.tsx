@@ -10,7 +10,7 @@ const FloatingElements: React.FC = () => {
     const newElements = [...Array(20)].map((_, i) => (
       <div
         key={i}
-        className="absolute rounded-full bg-green-600 bg-opacity-30"
+        className="absolute rounded-full bg-green-600 dark:opacity-30 bg-opacity-30"
         style={{
           width: `${Math.random() * 100 + 50}px`,
           height: `${Math.random() * 100 + 50}px`,

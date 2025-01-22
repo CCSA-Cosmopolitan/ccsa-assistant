@@ -9,9 +9,31 @@ import FloatingElements from "@/components/FloatingElements"
 // import FloatingElements from "./components/FloatingElements"
 import homePattern from '@/public/home-pattern.jpg'
 import logo from '@/public/logo.jpeg'
+import { Metadata } from "next"
+import { ModeToggle } from "@/components/dark-button"
+import { SignIn } from "@clerk/nextjs"
+// import { Link } from "lucide-react"
+import Link from "next/link"
+
+// export const metadata: Metadata = {
+//   title: "Welcome to Farmer's Assistant AI",
+//   description:
+//     "Get top-notch assistance for all your farming needs with our AI-powered platform. Expertise spanning over 20 PhDs in various agricultural fields.",
+//   openGraph: {
+//     images: [
+//       {
+//         url: "https://farmersassistant.ai/home-og-image.jpg",
+//         width: 1200,
+//         height: 630,
+//         alt: "Farmer's Assistant AI Home",
+//       },
+//     ],
+//   },
+// }
+
+
 
 const welcomeText = `
-Welcome to Farmer's Assistant AI! With expertise spanning over 20 PhDs in various agricultural fields and an IQ of 1000, 
 I'm here to provide you with top-notch assistance for all your farming needs. 
 Let's cultivate success together!
 `
@@ -29,59 +51,30 @@ export default function Home() {
   return (
     <div
      
-    className="min-h-screen grid  md:grid-cols-3 sm:grid-cols-1 bg-gradient-to-br  animate-gradient-x relative">
+    className="min-h-screen w-full bg-gradient-to-br h-screen animate-gradient-x relative">
       <FloatingElements />
       <div
-      //  style={{
-      //   backgroundImage: `url(${homePattern.src})`,
-      //   backgroundSize: "cover",
-      //   backgroundPosition: "center",
-      // }}
-      className="lg:col-span-2 md:col-span-2 sm:col-span-1 bg-green-100/30 flex flex-col justify-center items-center p-8 space-y-6 relative z-10">
-        <div className="w-full max-w-2xl space-y-6 text-center">
-          <Image src={logo} alt="Farmer" width={300} height={300} className="mx-auto object-center object-cover h-[150px] w-[150px] rounded-full shadow-lg" />
-          <h1 className="text-4xl font-bold text-green-900 animate-fade-in-down">CCSA Farmer's Assistant</h1>
-          <p className="text-lg text-green-800 animate-fade-in-up">{welcomeText}</p>
+      className=" h-full dark:bg-green-950/30 bg-green-100/30 flex flex-col justify-center items-center p-8 space-y-6 relative z-10">
+       
+       <div className=" absolute top-0 right-0 p-4">
+          <ModeToggle />
         </div>
-      </div>
-      <div className="lg:col-span-1 md:col-span-1 px-20 sm:col-span-1 flex justify-center items-center bg-white bg-opacity-90 p-8 relative z-10">
-        <div className="w-full max-w-md space-y-6">
-          <h2 className="text-2xl font-semibold text-center text-green-800">Login</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white">
-              Log in
-            </Button>
-          </form>
-          <p className="text-center text-sm">
-            Don't have an account?{" "}
-            <a href="#" className="text-green-600 hover:underline">
-              Sign up
-            </a>
-          </p>
+
+        <div className="w-full max-w-2xl space-y-3 text-center">
+          <Image src={logo} alt="Farmer" width={300} height={300} className="mx-auto  object-center object-cover h-[150px] w-[150px] rounded-full shadow-lg" />
+          <h1 className=" text-2xl md:text-4xl font-bold text-green-900 font-main dark:text-green-50 animate-fade-in-down">CCSA CUA Farmer's AI</h1>
+          <p className="text-md md:text-lg text-black dark:text-white animate-fade-in-up">{welcomeText}</p>
         </div>
+      <div className=" flex w-full justify-center items-center mx-auto space-x-3 max-w-md">
+      <Link href="/sign-in" className="text-green-900 font-semibold py-2 bg-green-500 px-10 rounded-lg dark:text-green-50">
+        <p>Sign Up</p>
+      </Link>
+      <Link href="/sign-in" className="text-green-900 font-semibold py-2 bg-green-500 bg-transparent border-2 border-green-500 px-10 rounded-lg dark:text-green-50">
+        <p>Sign In</p>
+      </Link>
       </div>
+      </div>
+    
     </div>
   )
 }
