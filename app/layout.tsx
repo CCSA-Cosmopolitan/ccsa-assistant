@@ -5,6 +5,8 @@ import {
   // SignedOut,
   // UserButton
 } from '@clerk/nextjs'
+import { dark } from '@clerk/themes'
+// import {  } from '@clerk/themes'
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -81,16 +83,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ClerkProvider>
          <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-          >
-        {children}
-          </ThemeProvider>
+            >
+            <ClerkProvider appearance={{
+              baseTheme: dark,
+            }} >
+              {children}
           </ClerkProvider>
+          </ThemeProvider>
       </body>
     </html>
   );
