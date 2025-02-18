@@ -1,6 +1,6 @@
 import * as z from 'zod'
 
-export const ConversationSchema = z.object({
+export const ChatSchema = z.object({
     prompt: z.string().min(1, {
         message: "Please provide a prompt"
     }),

@@ -1,48 +1,73 @@
-import LogoComponent from "@/components/LogoComponent";
+import { AppSidebar } from "@/components/app-sidebar"
 import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-  } from "@/components/ui/sheet"
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import { Separator } from "@/components/ui/separator"
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
 
 
-  
 
 
-  
-  export default function DashboardLayout({
+  export default function RootLayout({
     children,
   }: Readonly<{
     children: React.ReactNode;
   }>) {
     return (
-
-       <div className="">
-            <Sheet >
-            <SheetTrigger className=" w-full  flex items-center justify-end px-4 sm:hidden bg-green-100">
-                <LogoComponent />
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" />
-                </svg>
-            </SheetTrigger>
-            <SheetContent side={"left"} className=" px-0 py-0">
-                <SheetHeader className=" flex flex-col items-start">
-                    <SheetTitle hidden className="hidden"></SheetTitle>
-                   <LogoComponent />
-                </SheetHeader>
-            </SheetContent>
-            </Sheet>
-           <div className=" flex">
-            <div className=" w-1/6 bg-green-100 hidden sm:block h-screen">
-                Hello people
-            </div>
-                {children}
+      <div>
+     <SidebarProvider>
+       <AppSidebar />
+       <SidebarInset>
+         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+           <div className="flex items-center gap-2 px-4">
+             <SidebarTrigger className="-ml-1" />
+             <Separator orientation="vertical" className="mr-2 h-4" />
+             <Breadcrumb>
+               <BreadcrumbList>
+                 <BreadcrumbItem className="hidden md:block">
+                   <BreadcrumbLink href="#">
+                     Building Your Application
+                   </BreadcrumbLink>
+                 </BreadcrumbItem>
+                 <BreadcrumbSeparator className="hidden md:block" />
+                 <BreadcrumbItem>
+                   <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                 </BreadcrumbItem>
+               </BreadcrumbList>
+             </Breadcrumb>
            </div>
-       </div>
-    
+         </header>
+            {children}
+        </SidebarInset>
+   </SidebarProvider>
+      </div>
     );
   }
+
   
+
+
+
+// export default function Page() {
+//   return (
+
+//         <main className="flex flex-col flex-1">
+//           <div className="flex flex-col gap-4 p-4">
+//             <h1 className="text-3xl font-semibold">Data Fetching</h1>
+//             <p className="text-lg text-muted-foreground">
+//               Learn how to fetch data in your application using SWR.
+//             </p>
+//           </div>
+//         </main>
+//      
+//   )
+// }
