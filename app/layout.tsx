@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     siteName: "Farmer's Assistant AI",
     images: [
       {
-        url: "https://https://ccsaai.cosmopolitan.edu.ng/og-image.jpg",
+        url: "https://https://ai.ccsa.cosmopolitan.edu.ng/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Farmer's Assistant AI",

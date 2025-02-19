@@ -24,6 +24,7 @@ import cosmoSvg from '@/public/cosmo-svg.svg'
 import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
 import { TeamSwitcher } from "@/components/team-switcher"
+
 import {
   Sidebar,
   SidebarContent,
@@ -33,9 +34,9 @@ import {
 } from "@/components/ui/sidebar"
 
 
-// declare const Plus: .ForwardRefExoticComponent<Omit<LucideProps, "ref"> & react.RefAttributes<SVGSVGElement>>;
 
-// This is sample data.
+
+
 const data = {
   user: {
     name: "shadcn",
@@ -48,20 +49,10 @@ const data = {
       logo: logo,
       plan: "Smart Agriculture AI Assiatant",
     },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
   ],
   navMain: [
     {
-      title: "AI Analyser",
+      title: "AI Assistants",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
@@ -75,7 +66,7 @@ const data = {
           url: "#",
         },
         {
-          title: "Farm Management",
+          title: "Farm Manager",
           url: "#",
         },
       ],
@@ -90,7 +81,7 @@ const data = {
           url: "#",
         },
         {
-          title: "Explorer",
+          title: "Farm Assistant",
           url: "#",
         },
         {
@@ -100,81 +91,47 @@ const data = {
       ],
     },
     {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
+      title: "Chats",
+      url: "/chats",
+      icon: Bot,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "Yield Calculator",
+          url: "/chats/yield-calculator",
         },
         {
-          title: "Get Started",
-          url: "#",
+          title: "Soil Analyzer",
+          url: "/chats/soil-analyzer",
         },
         {
-          title: "Tutorials",
-          url: "#",
+          title: "Farm Manager",
+          url: "/chats/farm-manager",
         },
         {
-          title: "Changelog",
-          url: "#",
+          title: "Livestock Manager",
+          url: "/chats/livestock-manager",
         },
+        {
+          title: "Farm Assistant",
+          url: "/chats/farm-assistant",
+        },
+      
       ],
     },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
+
   ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
+
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar> ) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher 
+        <TeamSwitcher
         teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
