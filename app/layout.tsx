@@ -5,6 +5,8 @@ import {
   // SignedOut,
   // UserButton
 } from '@clerk/nextjs'
+import { dark } from '@clerk/themes'
+// import {  } from '@clerk/themes'
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -46,7 +48,7 @@ export const metadata: Metadata = {
     siteName: "Farmer's Assistant AI",
     images: [
       {
-        url: "https://https://ccsaai.cosmopolitan.edu.ng/og-image.jpg",
+        url: "https://https://ai.ccsa.cosmopolitan.edu.ng/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Farmer's Assistant AI",
@@ -81,16 +83,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ClerkProvider>
          <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-          >
-        {children}
-          </ThemeProvider>
+            >
+            <ClerkProvider appearance={{
+              baseTheme: dark,
+            }} >
+              {children}
           </ClerkProvider>
+          </ThemeProvider>
       </body>
     </html>
   );
