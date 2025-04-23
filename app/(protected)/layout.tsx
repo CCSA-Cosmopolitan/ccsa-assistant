@@ -1,48 +1,23 @@
-import { AppSidebar } from "@/components/app-sidebar"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { currentUser } from "@clerk/nextjs/server";
+import type React from "react"
+import { getServerSession } from "@/auth"
+import { redirect } from "next/navigation"
+import { ProtectedLayoutWrapper } from "@/components/protected-layout-wrapper"
 
+export default async function ProtectedLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const session = await getServerSession()
 
-
-
-  export default async function RootLayout({
-    children,
-  }: Readonly<{
-    children: React.ReactNode;
-  }>) {
-
-    const user = await currentUser();
-
-    if (!user) {
-      return null
-    }
-    return (
-      <div>
-     <SidebarProvider>
-       <AppSidebar  />
-       <SidebarInset>
-         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-           <div className="flex items-center gap-2 px-4">
-             <SidebarTrigger className="-ml-1" />
-             <Separator orientation="vertical" className="mr-2 h-4" />
-           </div>
-         </header>
-            {children}
-        </SidebarInset>
-   </SidebarProvider>
-      </div>
-    );
+  if (!session || !session.user) {
+    redirect(`/login?callbackUrl=${encodeURIComponent("/")}`)
   }
+
+  // If email not verified, redirect to login
+  if (!session.user.emailVerified) {
+    return redirect("/login")
+  }
+
+  return <ProtectedLayoutWrapper>{children}</ProtectedLayoutWrapper>
+}
