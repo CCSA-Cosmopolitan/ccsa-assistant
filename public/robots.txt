@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://farmersassistant.ai/sitemap.xml
-

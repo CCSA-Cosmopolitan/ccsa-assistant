@@ -1,142 +1,143 @@
 "use client"
 
-import * as react from "react"
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-  ArrowUpZA,
-} from "lucide-react"
-import logo from "./logo"
-
-
-
-import { NavMain } from "@/components/nav-main"
-import cosmoLogo from '@/public/cosmo-logo.png'
-import cosmoSvg from '@/public/cosmo-svg.svg'
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
-
+import { usePathname } from "next/navigation"
+import Link from "next/link"
+import { useSession, signOut } from "next-auth/react"
+import { BarChart3, Home, Leaf, LogOut, MessageSquare, Settings, Users, Wallet } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
-  SidebarRail,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarSeparator,
 } from "@/components/ui/sidebar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 
+export function AppSidebar() {
+  const pathname = usePathname()
+  const { data: session } = useSession()
+  const isAdmin = session?.user?.role === "ADMIN"
 
-
-
-
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
+  const userRoutes = [
     {
-      name: "CCSA CUA (AI)",
-      logo: logo,
-      plan: "Smart Agriculture AI Assiatant",
-    },
-  ],
-  navMain: [
-    {
-      title: "AI Assistants",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "Yield Calculator",
-          url: "#",
-        },
-        {
-          title: "Soil Analyzer",
-          url: "#",
-        },
-        {
-          title: "Farm Manager",
-          url: "#",
-        },
-      ],
+      title: "Dashboard",
+      href: "/dashboard",
+      icon: Home,
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Livestock Manager",
-          url: "#",
-        },
-        {
-          title: "Farm Assistant",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
+      title: "Farmers Assistant",
+      href: "/farmers-assistant",
+      icon: MessageSquare,
     },
     {
-      title: "Chats",
-      url: "/chats",
-      icon: Bot,
-      items: [
-        {
-          title: "Yield Calculator",
-          url: "/chats/yield-calculator",
-        },
-        {
-          title: "Soil Analyzer",
-          url: "/chats/soil-analyzer",
-        },
-        {
-          title: "Farm Manager",
-          url: "/chats/farm-manager",
-        },
-        {
-          title: "Livestock Manager",
-          url: "/chats/livestock-manager",
-        },
-        {
-          title: "Farm Assistant",
-          url: "/chats/farm-assistant",
-        },
-      
-      ],
+      title: "Farm Analyzer",
+      href: "/farm-analyzer",
+      icon: BarChart3,
     },
+    {
+      title: "Crop Analyzer",
+      href: "/crop-analyzer",
+      icon: Leaf,
+    },
+    {
+      title: "Soil Analyzer",
+      href: "/soil-analyzer",
+      icon: BarChart3,
+    },
+    {
+      title: "Wallet",
+      href: "/wallet",
+      icon: Wallet,
+    },
+    {
+      title: "Settings",
+      href: "/settings",
+      icon: Settings,
+    },
+  ]
 
-  ],
+  const adminRoutes = [
+    {
+      title: "Dashboard",
+      href: "/admin/dashboard",
+      icon: Home,
+    },
+    {
+      title: "Users",
+      href: "/admin/users",
+      icon: Users,
+    },
+    {
+      title: "Settings",
+      href: "/admin/settings",
+      icon: Settings,
+    },
+  ]
 
-}
+  const routes = isAdmin ? adminRoutes : userRoutes
 
-export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar> ) {
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar>
       <SidebarHeader>
-        <TeamSwitcher
-        teams={data.teams} />
+        <div className="flex items-center gap-2 px-4 py-2">
+          <div className="rounded-full bg-primary/10 p-1">
+            <Leaf className="h-5 w-5 text-primary" />
+          </div>
+          <span className="text-xl font-bold">CCSA FarmAI</span>
+        </div>
       </SidebarHeader>
+      <SidebarSeparator />
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <SidebarGroup>
+          <SidebarGroupLabel>{isAdmin ? "Admin" : "Dashboard"}</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {routes.map((route) => (
+                <SidebarMenuItem key={route.href}>
+                  <SidebarMenuButton asChild isActive={pathname === route.href}>
+                    <Link href={route.href}>
+                      <route.icon className="h-4 w-4" />
+                      <span>{route.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <div className="flex items-center justify-between p-4">
+          <div className="flex items-center gap-3">
+            <Avatar>
+              <AvatarImage src={session?.user?.image || ""} />
+              <AvatarFallback className="bg-primary/10 text-primary">
+                {session?.user?.name?.charAt(0) || "U"}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-sm font-medium">{session?.user?.name}</p>
+              <p className="text-xs text-muted-foreground">{session?.user?.email}</p>
+            </div>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="sr-only">Log out</span>
+          </Button>
+        </div>
       </SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   )
 }
