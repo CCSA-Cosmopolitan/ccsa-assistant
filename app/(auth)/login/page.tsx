@@ -1,5 +1,6 @@
 import { LoginForm } from "@/components/auth/login-form"
 import { Leaf } from "lucide-react"
+import { Suspense } from "react"
 import Link from "next/link"
 
 export default function LoginPage() {
@@ -15,7 +16,9 @@ export default function LoginPage() {
           <p className="text-muted-foreground">Enter your email and password to access your account</p>
         </div>
         <div className="rounded-lg border border-border/40 bg-card p-6 shadow-sm">
+        <Suspense fallback={<div>Loading...</div>}>
           <LoginForm />
+        </Suspense>
         </div>
         <div className="text-center text-sm">
           Don&apos;t have an account?{" "}
