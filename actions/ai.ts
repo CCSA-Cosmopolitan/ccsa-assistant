@@ -386,6 +386,7 @@ export async function generateCropAnalysis(imageDescription: string, analysisTyp
          5. Processing and preservation methods
          6. Market value and economic importance
        `
+       
         break
       default:
         analysisPrompt = `
