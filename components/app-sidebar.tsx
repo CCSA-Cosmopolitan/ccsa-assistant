@@ -85,7 +85,7 @@ export function AppSidebar() {
   const routes = isAdmin ? adminRoutes : userRoutes
 
   return (
-    <Sidebar className=" bg-red-500">
+    <Sidebar className="">
       <SidebarHeader>
         <div className="flex items-center gap-2 px-4 py-2">
           <div className="rounded-full bg-primary/10 p-1">

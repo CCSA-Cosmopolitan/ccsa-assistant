@@ -82,7 +82,7 @@ const PublicNavigation = () => {
 
       <div className="flex items-center gap-4">
        { session.data ? (
-        <Link href={'/'}>
+        <Link href={'/dashboard'}>
         <Button className="bg-green-600 hover:bg-green-700 hidden md:flex">
             Dashboard
         </Button>
