@@ -7,9 +7,11 @@ import { AppSidebar } from "@/components/app-sidebar"
 export function ProtectedLayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen w-full">
+        <div className="">
         <AppSidebar />
-        <main className="flex-1 overflow-y-auto">{children}</main>
+        </div>
+        <main className="flex h-screen w-full overflow-y-scroll">{children}</main>
       </div>
     </SidebarProvider>
   )

@@ -145,7 +145,7 @@ export default async function DashboardPage() {
               </div>
               <div>
                 <CardTitle>Crop Analyzer</CardTitle>
-                <CardDescription>Upload crop images for detailed analysis</CardDescription>
+                <CardDescription>Upload crop images for detailed analysis, and predictions</CardDescription>
               </div>
             </div>
           </CardHeader>

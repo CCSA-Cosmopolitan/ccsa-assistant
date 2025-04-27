@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type * as z from "zod"
+import { Markdown } from "@/components/ui/markdown"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -75,6 +76,21 @@ export default function FarmAnalyzerPage() {
       </div>
 
       <div className="grid gap-6">
+      {analysis && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Farm Analysis Results</CardTitle>
+              <CardDescription>Based on the information provided, here's our analysis of your farm.</CardDescription>
+            </CardHeader>
+            <CardContent>
+
+               
+              <div className="prose max-w-none dark:prose-invert">
+                <Markdown content={analysis} animationSpeed={5} revealImmediately={false} />
+              </div>
+            </CardContent>
+          </Card>
+        )}
         <Card>
           <CardHeader>
             <CardTitle>Farm Details</CardTitle>
@@ -209,19 +225,7 @@ export default function FarmAnalyzerPage() {
           </Form>
         </Card>
 
-        {analysis && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Farm Analysis Results</CardTitle>
-              <CardDescription>Based on the information provided, here's our analysis of your farm.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="prose max-w-none dark:prose-invert">
-                <div className="whitespace-pre-wrap">{analysis}</div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+       
       </div>
     </div>
   )

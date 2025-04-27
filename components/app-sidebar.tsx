@@ -13,6 +13,7 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarTrigger,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
@@ -84,7 +85,7 @@ export function AppSidebar() {
   const routes = isAdmin ? adminRoutes : userRoutes
 
   return (
-    <Sidebar>
+    <Sidebar className=" bg-red-500">
       <SidebarHeader>
         <div className="flex items-center gap-2 px-4 py-2">
           <div className="rounded-full bg-primary/10 p-1">
@@ -123,7 +124,7 @@ export function AppSidebar() {
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-medium">{session?.user?.name}</p>
+              <p className="text-sm font-medium line-clamp-1">{session?.user?.name}</p>
               <p className="text-xs text-muted-foreground">{session?.user?.email}</p>
             </div>
           </div>
