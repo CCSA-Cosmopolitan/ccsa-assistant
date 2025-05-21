@@ -89,12 +89,17 @@ const PublicNavigation = () => {
         </Link>
        ) : (
         <>
-         <Button variant="outline" className="hidden md:flex">
-          Log in
-        </Button>
-        <Button className="bg-green-600 hover:bg-green-700 hidden md:flex">
-            Get Started
-        </Button>
+        <Link href={'/login'} className="text-lg w-full flex font-medium hover:text-green-600 transition-colors">
+          <Button variant="outline" className=" border-primary w-full">
+            Log in
+          </Button>
+          </Link>
+            <Button className="bg-green-600 w-full hover:bg-green-700" onClick={() => {}}>
+                <Link href={'/register'} className="text-lg w-full flex font-medium hover:text-green-600 transition-colors">
+                Get Started
+                </Link>
+            </Button>
+       
         </>
        )
 
