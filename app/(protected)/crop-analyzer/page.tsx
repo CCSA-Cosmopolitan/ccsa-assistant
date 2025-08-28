@@ -12,6 +12,7 @@ import Image from "next/image"
 import { generateCropAnalysis } from "@/actions/ai"
 import { Markdown } from "@/components/ui/markdown"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { AiPageHeader } from "@/components/ai-page-header"
 
 type AnalysisType = "general" | "disease" | "identification" | "planting" | "harvest" | "nutrition"
 
@@ -24,6 +25,7 @@ export default function CropAnalyzerPage() {
   const [analysisType, setAnalysisType] = useState<AnalysisType>("general")
   const [isDragging, setIsDragging] = useState(false)
   const [isImageLoading, setIsImageLoading] = useState(false)
+  const [language, setLanguage] = useState("english")
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -115,8 +117,8 @@ export default function CropAnalyzerPage() {
       // Convert image to base64 data URL
       const imageDataUrl = await convertImageToBase64(selectedImage)
 
-      // Include the analysis type in the request
-      const result = await generateCropAnalysis(imageDataUrl, analysisType)
+      // Include the analysis type and language in the request
+      const result = await generateCropAnalysis(imageDataUrl, analysisType, language)
 
       if (result.error) {
         toast({
@@ -172,15 +174,16 @@ export default function CropAnalyzerPage() {
   ]
 
   return (
-    <div className="container py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Crop Analyzer</h1>
-        <p className="text-muted-foreground">
-          Upload images of crops or plants to get AI-powered detailed analysis and information using OpenAI's vision technology.
-        </p>
-      </div>
-
-      <div className="grid gap-6">
+    <div className="min-h-screen w-full mx-auto max-w-4xl flex flex-col">
+      <AiPageHeader 
+        title="Crop Analyzer"
+        description="Upload images of crops or plants to get AI-powered detailed analysis using OpenAI's vision technology"
+        language={language}
+        onLanguageChange={setLanguage}
+      />
+      
+      <div className="flex-1 container py-6">
+        <div className="grid gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Upload Crop Image</CardTitle>
@@ -326,6 +329,7 @@ export default function CropAnalyzerPage() {
             </CardContent>
           </Card>
         )}
+        </div>
       </div>
     </div>
   )

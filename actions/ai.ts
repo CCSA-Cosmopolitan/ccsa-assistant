@@ -179,7 +179,7 @@ FOLLOW_UP_SUGGESTIONS:
   }
 }
 
-export async function generateFarmAnalysis(values: z.infer<typeof FarmAnalyzerSchema>) {
+export async function generateFarmAnalysis(values: z.infer<typeof FarmAnalyzerSchema>, language = "english") {
   const session = await getServerSession()
 
   if (!session?.user?.id) {
@@ -203,6 +203,11 @@ export async function generateFarmAnalysis(values: z.infer<typeof FarmAnalyzerSc
     if (session.user.role !== "ADMIN" && promptCount >= 3 && user.walletBalance <= 0) {
       return { error: "You've reached your free tier limit. Please upgrade your account to continue." }
     }
+
+    // Language support
+    const languageInstruction = language === "english" 
+      ? "Respond in clear, professional English." 
+      : `Respond in ${language} language. If you don't know the exact translation of technical terms, provide them in English with a brief explanation in ${language}.`
 
     const prompt = `
      Analyze the following farm data and provide detailed recommendations:
@@ -228,7 +233,7 @@ export async function generateFarmAnalysis(values: z.infer<typeof FarmAnalyzerSc
       model: openai("gpt-4o"),
       prompt,
       system:
-        "You are an expert agricultural analyst specializing in Nigerian farming conditions. Provide detailed, structured, and practical advice based on the farm data provided.",
+        `You are an expert agricultural analyst specializing in Nigerian farming conditions. Provide detailed, structured, and practical advice based on the farm data provided. ${languageInstruction}`,
     })
 
     // Save prompt to database
@@ -247,7 +252,7 @@ export async function generateFarmAnalysis(values: z.infer<typeof FarmAnalyzerSc
   }
 }
 
-export async function generateSoilAnalysis(values: z.infer<typeof SoilAnalyzerSchema>) {
+export async function generateSoilAnalysis(values: z.infer<typeof SoilAnalyzerSchema>, language = "english") {
   const session = await getServerSession()
 
   if (!session?.user?.id) {
@@ -271,6 +276,11 @@ export async function generateSoilAnalysis(values: z.infer<typeof SoilAnalyzerSc
     if (session.user.role !== "ADMIN" && promptCount >= 3 && user.walletBalance <= 0) {
       return { error: "You've reached your free tier limit. Please upgrade your account to continue." }
     }
+
+    // Language support
+    const languageInstruction = language === "english" 
+      ? "Respond in clear, professional English." 
+      : `Respond in ${language} language. If you don't know the exact translation of technical terms, provide them in English with a brief explanation in ${language}.`
 
     const prompt = `
      Analyze the following soil data and provide detailed recommendations:
@@ -297,7 +307,7 @@ export async function generateSoilAnalysis(values: z.infer<typeof SoilAnalyzerSc
       model: openai("gpt-4o"),
       prompt,
       system:
-        "You are an expert soil scientist specializing in Nigerian agricultural soils. Provide detailed, structured, and practical advice based on the soil data provided.",
+        `You are an expert soil scientist specializing in Nigerian agricultural soils. Provide detailed, structured, and practical advice based on the soil data provided. ${languageInstruction}`,
     })
 
     // Save prompt to database
@@ -316,7 +326,7 @@ export async function generateSoilAnalysis(values: z.infer<typeof SoilAnalyzerSc
   }
 }
 
-export async function generateCropAnalysis(imageDataUrl: string, analysisType = "general") {
+export async function generateCropAnalysis(imageDataUrl: string, analysisType = "general", language = "english") {
   const session = await getServerSession()
 
   if (!session?.user?.id) {
@@ -343,8 +353,13 @@ export async function generateCropAnalysis(imageDataUrl: string, analysisType = 
 
     // Use OpenAI Vision API to analyze the actual uploaded image
 
+    // Language support
+    const languageInstruction = language === "english" 
+      ? "Respond in clear, professional English." 
+      : `Respond in ${language} language. If you don't know the exact translation of technical terms, provide them in English with a brief explanation in ${language}.`
+
     // Customize system prompt and user message based on analysis type
-    let systemPrompt = "You are an expert agricultural analyst specializing in Nigerian crops and plants. Analyze the image provided and give detailed, structured, and practical information."
+    let systemPrompt = `You are an expert agricultural analyst specializing in Nigerian crops and plants. Analyze the image provided and give detailed, structured, and practical information. ${languageInstruction}`
     let userMessage = ""
 
     switch (analysisType) {

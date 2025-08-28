@@ -15,11 +15,13 @@ import { useToast } from "@/hooks/use-toast"
 import { FarmAnalyzerSchema } from "@/schemas"
 import { Loader2 } from "lucide-react"
 import { generateFarmAnalysis } from "@/actions/ai"
+import { AiPageHeader } from "@/components/ai-page-header"
 
 export default function FarmAnalyzerPage() {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [analysis, setAnalysis] = useState<string | null>(null)
+  const [language, setLanguage] = useState("english")
 
   const form = useForm<z.infer<typeof FarmAnalyzerSchema>>({
     resolver: zodResolver(FarmAnalyzerSchema),
@@ -39,7 +41,7 @@ export default function FarmAnalyzerPage() {
     setAnalysis(null)
 
     try {
-      const result = await generateFarmAnalysis(values)
+      const result = await generateFarmAnalysis(values, language)
 
       if (result.error) {
         toast({
@@ -69,13 +71,16 @@ export default function FarmAnalyzerPage() {
   }
 
   return (
-    <div className="container py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Farm Analyzer</h1>
-        <p className="text-muted-foreground">Analyze your farm's conditions to get personalized recommendations.</p>
-      </div>
-
-      <div className="grid gap-6">
+    <div className="min-h-screen w-full max-w-4xl mx-auto flex flex-col">
+      <AiPageHeader 
+        title="Farm Analyzer"
+        description="Analyze your farm's conditions to get personalized recommendations"
+        language={language}
+        onLanguageChange={setLanguage}
+      />
+      
+      <div className="flex-1 container py-6">
+        <div className="grid gap-6">
       {analysis && (
           <Card>
             <CardHeader>
@@ -226,6 +231,7 @@ export default function FarmAnalyzerPage() {
         </Card>
 
        
+        </div>
       </div>
     </div>
   )

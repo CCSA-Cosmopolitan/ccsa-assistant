@@ -3,17 +3,17 @@
 import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { useSession } from "next-auth/react"
-import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
-import { Loader2, Send, RefreshCw, MessageSquare, Sun, Moon } from "lucide-react"
+import { Loader2, Send, RefreshCw, MessageSquare } from "lucide-react"
 import { generateFarmersAssistantResponse } from "@/actions/ai"
 import { Markdown } from "@/components/ui/markdown"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { AiPageHeader } from "@/components/ai-page-header"
 
 type Message = {
   role: "user" | "assistant"
@@ -24,7 +24,6 @@ type Message = {
 export default function FarmersAssistantPage() {
   const { data: session } = useSession()
   const { toast } = useToast()
-  const { theme, setTheme } = useTheme()
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const [language, setLanguage] = useState("english")
@@ -145,58 +144,34 @@ export default function FarmersAssistantPage() {
   }
 
   return (
-    <div className="flex h-screen w-full  flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-border/40 px-6 py-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="flex items-center gap-3">
-          <h1 className="text-xl font-semibold tracking-tight">Farmers Assistant</h1>
-          {messages.length > 0 && (
-            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-medium">
-              {Math.ceil(messages.length / 2)} exchanges
+    <div className="flex h-screen w-full flex-col">
+      <AiPageHeader 
+        title="Farmers Assistant"
+        description="Chat with our AI assistant in your preferred Nigerian language"
+        language={language}
+        onLanguageChange={setLanguage}
+      />
+
+      {/* Additional header info */}
+      {messages.length > 0 && (
+        <div className="px-6 py-2 border-b border-border/20 bg-muted/30">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">
+              {Math.ceil(messages.length / 2)} exchanges • Last activity: {lastActivity}
             </span>
-          )}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleReset} 
+              title="Reset conversation"
+              className="h-6 px-2 text-xs"
+            >
+              <RefreshCw className="h-3 w-3 mr-1" />
+              Reset
+            </Button>
+          </div>
         </div>
-        
-        <div className="flex items-center gap-2">
-          {/* Language Selector */}
-          <Select value={language} onValueChange={setLanguage}>
-            <SelectTrigger className="w-[140px] h-8">
-              <SelectValue placeholder="Language" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="english">English</SelectItem>
-              <SelectItem value="hausa">Hausa</SelectItem>
-              <SelectItem value="yoruba">Yoruba</SelectItem>
-              <SelectItem value="igbo">Igbo</SelectItem>
-              <SelectItem value="pidgin">Nigerian Pidgin</SelectItem>
-            </SelectContent>
-          </Select>
-          
-          {/* Theme Toggle */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            title="Toggle theme"
-          >
-            {theme === "dark" ? (
-              <Sun className="h-4 w-4" />
-            ) : (
-              <Moon className="h-4 w-4" />
-            )}
-          </Button>
-          
-          {/* Reset Button */}
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={handleReset} 
-            title="Reset conversation"
-          >
-            <RefreshCw className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+      )}
 
       {/* Messages Area */}
       <div className="flex-1 overflow-hidden">
@@ -267,7 +242,7 @@ export default function FarmersAssistantPage() {
                         </div>
                         
                         {/* Follow-up suggestions - only show for the latest message */}
-                        {message.role === "assistant" && message.suggestions && message.suggestions.length > 0 && index === messages.length - 1 && (
+                        {/* {message.role === "assistant" && message.suggestions && message.suggestions.length > 0 && index === messages.length - 1 && (
                           <div className="space-y-2 w-full mt-3">
                             <p className="text-xs text-muted-foreground">💡 Continue the conversation:</p>
                             <div className="grid gap-1">
@@ -285,7 +260,7 @@ export default function FarmersAssistantPage() {
                               ))}
                             </div>
                           </div>
-                        )}
+                        )} */}
                       </div>
                       
                       {message.role === "user" && (

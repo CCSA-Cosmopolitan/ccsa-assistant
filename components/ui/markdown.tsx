@@ -250,7 +250,7 @@ export function Markdown({ content, className, animationSpeed = 10, revealImmedi
       )}
       
       {/* Skip animation button */}
-      {shouldAnimate && !isComplete && (
+      {/* {shouldAnimate && !isComplete && (
         <div className="absolute bottom-0 right-0 p-2">
           <button 
             onClick={handleSkipAnimation} 
@@ -259,7 +259,7 @@ export function Markdown({ content, className, animationSpeed = 10, revealImmedi
             Skip animation
           </button>
         </div>
-      )}
+      )} */}
     </div>
   )
 }
