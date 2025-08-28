@@ -3,12 +3,13 @@
 import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { useSession } from "next-auth/react"
+import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
-import { Loader2, Send, RefreshCw, MessageSquare } from "lucide-react"
+import { Loader2, Send, RefreshCw, MessageSquare, Sun, Moon } from "lucide-react"
 import { generateFarmersAssistantResponse } from "@/actions/ai"
 import { Markdown } from "@/components/ui/markdown"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -23,6 +24,7 @@ type Message = {
 export default function FarmersAssistantPage() {
   const { data: session } = useSession()
   const { toast } = useToast()
+  const { theme, setTheme } = useTheme()
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const [language, setLanguage] = useState("english")
@@ -143,179 +145,200 @@ export default function FarmersAssistantPage() {
   }
 
   return (
-    <div className="container py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Farmers Assistant</h1>
-        <p className="text-muted-foreground">
-          Chat with our AI assistant about farming techniques, crop diseases, and more.
-        </p>
+    <div className="flex h-screen w-full  flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between border-b border-border/40 px-6 py-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="flex items-center gap-3">
+          <h1 className="text-xl font-semibold tracking-tight">Farmers Assistant</h1>
+          {messages.length > 0 && (
+            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-medium">
+              {Math.ceil(messages.length / 2)} exchanges
+            </span>
+          )}
+        </div>
+        
+        <div className="flex items-center gap-2">
+          {/* Language Selector */}
+          <Select value={language} onValueChange={setLanguage}>
+            <SelectTrigger className="w-[140px] h-8">
+              <SelectValue placeholder="Language" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="english">English</SelectItem>
+              <SelectItem value="hausa">Hausa</SelectItem>
+              <SelectItem value="yoruba">Yoruba</SelectItem>
+              <SelectItem value="igbo">Igbo</SelectItem>
+              <SelectItem value="pidgin">Nigerian Pidgin</SelectItem>
+            </SelectContent>
+          </Select>
+          
+          {/* Theme Toggle */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            title="Toggle theme"
+          >
+            {theme === "dark" ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
+          </Button>
+          
+          {/* Reset Button */}
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={handleReset} 
+            title="Reset conversation"
+          >
+            <RefreshCw className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
-      <div className="grid gap-6">
-        <Card className="flex flex-col h-[80vh]">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  Conversation
-                  {messages.length > 0 && (
-                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
-                      {Math.ceil(messages.length / 2)} exchanges
-                    </span>
-                  )}
-                </CardTitle>
-                <CardDescription>
-                  Our AI assistant can answer questions about farming in Nigeria and remembers your conversation.
-                  {lastActivity && (
-                    <span className="block text-xs text-muted-foreground/70 mt-1">
-                      Last active: {lastActivity}
-                    </span>
-                  )}
-                </CardDescription>
-              </div>
-              <div className="flex items-center gap-2">
-                <Select value={language} onValueChange={setLanguage}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select language" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="english">English</SelectItem>
-                    <SelectItem value="hausa">Hausa</SelectItem>
-                    <SelectItem value="yoruba">Yoruba</SelectItem>
-                    <SelectItem value="igbo">Igbo</SelectItem>
-                    <SelectItem value="pidgin">Nigerian Pidgin</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Button variant="outline" size="icon" onClick={handleReset} title="Reset conversation">
-                  <RefreshCw className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="flex-1 overflow-hidden">
-            <ScrollArea className="h-full pr-4">
-              {messages.length === 0 ? (
-                <div className="flex h-full items-center justify-center text-center p-8">
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-medium">Start a conversation</h3>
-                    <p className="text-sm text-muted-foreground">Ask any farming related question to get started.</p>
-                    
-                    {/* Initial suggested questions */}
-                    <div className="mt-6">
-                      <p className="text-sm text-muted-foreground mb-3">Try asking about:</p>
-                      <div className="grid gap-2 max-w-md">
-                        {[
-                          "What are the best crops to plant during rainy season in Nigeria?",
-                          "How can I prevent pests from attacking my tomato plants?",
-                          "What fertilizers work best for cassava farming?",
-                          "When is the best time to harvest maize?"
-                        ].map((question, index) => (
-                          <Button
-                            key={index}
-                            variant="outline"
-                            className="text-left h-auto p-3 whitespace-normal"
-                            onClick={() => handleSuggestionClick(question)}
-                          >
-                            <MessageSquare className="h-4 w-4 mr-2 flex-shrink-0" />
-                            <span className="text-sm">{question}</span>
-                          </Button>
-                        ))}
-                      </div>
-                    </div>
+      {/* Messages Area */}
+      <div className="flex-1 overflow-hidden">
+        <ScrollArea className="h-full">
+          <div className="mx-auto max-w-3xl">
+            {messages.length === 0 ? (
+              <div className="flex h-full items-center justify-center px-4 py-12">
+                <div className="text-center space-y-6">
+                  <div className="space-y-2">
+                    <h2 className="text-2xl font-semibold text-foreground">
+                      Welcome to Farmers Assistant
+                    </h2>
+                    <p className="text-muted-foreground">
+                      Ask me anything about farming in Nigeria
+                    </p>
                   </div>
-                </div>
-              ) : (
-                <div className="space-y-4 pb-4">
-                  {messages.map((message, index) => (
-                    <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-                      <div className={`flex gap-3 max-w-[80%] ${message.role === "user" ? "flex-row-reverse" : ""}`}>
-                        <Avatar className="h-8 w-8">
-                          {message.role === "user" ? (
-                            <>
-                              <AvatarImage src={session?.user?.image || ""} />
-                              <AvatarFallback>{session?.user?.name?.charAt(0) || "U"}</AvatarFallback>
-                            </>
-                          ) : (
-                            <>
-                              <AvatarImage src="/ai-avatar.png" />
-                              <AvatarFallback className="bg-primary/10 text-primary">AI</AvatarFallback>
-                            </>
-                          )}
-                        </Avatar>
-                        <div
-                          className={`rounded-lg p-4 ${
-                            message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
-                          }`}
-                        >
-                          {message.role === "assistant" ? (
-                            <div className="space-y-4">
-                              <Markdown
-                                content={message.content}
-                                // @ts-ignore
-                                className={message.role === "user" ? "text-primary-foreground" : ""}
-                              />
-                              {/* Display follow-up suggestions */}
-                              {message.suggestions && message.suggestions.length > 0 && (
-                                <div className="mt-4 pt-4 border-t border-border/50">
-                                  <p className="text-sm text-muted-foreground mb-2">💡 You might also want to ask:</p>
-                                  <div className="space-y-1">
-                                    {message.suggestions.map((suggestion, suggestionIndex) => (
-                                      <Button
-                                        key={suggestionIndex}
-                                        variant="ghost"
-                                        size="sm"
-                                        className="text-left h-auto p-2 whitespace-normal w-full justify-start text-xs"
-                                        onClick={() => handleSuggestionClick(suggestion)}
-                                      >
-                                        <MessageSquare className="h-3 w-3 mr-2 flex-shrink-0" />
-                                        {suggestion}
-                                      </Button>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          ) : (
-                            <p>{message.content}</p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  <div ref={messagesEndRef} />
-                </div>
-              )}
-            </ScrollArea>
-          </CardContent>
-          <CardFooter className="border-t pt-4">
-            {/* Current suggestions display */}
-            {currentSuggestions.length > 0 && !isLoading && (
-              <div className="w-full mb-4">
-                <div className="bg-accent/50 rounded-lg p-3">
-                  <p className="text-sm font-medium text-muted-foreground mb-2">💡 Quick follow-ups:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {currentSuggestions.map((suggestion, index) => (
+                  
+                  {/* Starter Questions */}
+                  <div className="grid gap-2 max-w-md mx-auto">
+                    {[
+                      "What are the best crops for rainy season?",
+                      "How do I prevent tomato pests?",
+                      "Best fertilizers for cassava?",
+                      "When to harvest maize?"
+                    ].map((question, index) => (
                       <Button
                         key={index}
-                        variant="secondary"
-                        size="sm"
-                        className="text-xs h-auto py-1 px-2"
-                        onClick={() => handleSuggestionClick(suggestion)}
+                        variant="outline"
+                        className="text-left h-auto p-3 whitespace-normal"
+                        onClick={() => handleSuggestionClick(question)}
                       >
-                        {suggestion.length > 60 ? `${suggestion.substring(0, 60)}...` : suggestion}
+                        <MessageSquare className="h-4 w-4 mr-2 flex-shrink-0" />
+                        <span className="text-sm">{question}</span>
                       </Button>
                     ))}
                   </div>
                 </div>
               </div>
+            ) : (
+              <div className="space-y-6 p-4">
+                {messages.map((message, index) => (
+                  <div key={index} className="group">
+                    <div className={`flex gap-4 ${message.role === "user" ? "justify-end" : ""}`}>
+                      {message.role === "assistant" && (
+                        <Avatar className="h-8 w-8 flex-shrink-0 mt-1">
+                          <AvatarFallback className="bg-primary/10 text-primary text-sm font-medium">
+                            AI
+                          </AvatarFallback>
+                        </Avatar>
+                      )}
+                      
+                      <div className={`flex flex-col space-y-2 ${message.role === "user" ? "items-end" : "items-start"} max-w-[75%]`}>
+                        <div
+                          className={`rounded-2xl px-4 py-3 ${
+                            message.role === "user" 
+                              ? "bg-primary text-primary-foreground ml-12" 
+                              : "bg-muted/50 border border-border/40"
+                          }`}
+                        >
+                          {message.role === "assistant" ? (
+                            <Markdown
+                              content={message.content}
+                              className="prose-sm max-w-none"
+                            />
+                          ) : (
+                            <p className="text-sm leading-relaxed">{message.content}</p>
+                          )}
+                        </div>
+                        
+                        {/* Follow-up suggestions - only show for the latest message */}
+                        {message.role === "assistant" && message.suggestions && message.suggestions.length > 0 && index === messages.length - 1 && (
+                          <div className="space-y-2 w-full mt-3">
+                            <p className="text-xs text-muted-foreground">💡 Continue the conversation:</p>
+                            <div className="grid gap-1">
+                              {message.suggestions.slice(0, 3).map((suggestion, suggestionIndex) => (
+                                <Button
+                                  key={suggestionIndex}
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-left h-auto p-3 whitespace-normal w-full justify-start text-sm hover:bg-accent border-border/40"
+                                  onClick={() => handleSuggestionClick(suggestion)}
+                                >
+                                  <MessageSquare className="h-4 w-4 mr-2 flex-shrink-0 text-muted-foreground" />
+                                  {suggestion}
+                                </Button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {message.role === "user" && (
+                        <Avatar className="h-8 w-8 flex-shrink-0 mt-1">
+                          <AvatarImage src={session?.user?.image || ""} />
+                          <AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">
+                            {session?.user?.name?.charAt(0) || "U"}
+                          </AvatarFallback>
+                        </Avatar>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
             )}
-            
-            <form onSubmit={handleSubmit} className="flex w-full items-center space-x-2">
+          </div>
+        </ScrollArea>
+      </div>
+
+      {/* Input Area */}
+      <div className="border-t border-border/40 px-6 py-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="mx-auto max-w-4xl">
+          {/* Current suggestions */}
+          {currentSuggestions.length > 0 && !isLoading && (
+            <div className="mb-3">
+              <div className="bg-accent/20 rounded-xl p-3 border border-border/40">
+                <p className="text-xs text-muted-foreground mb-2 font-medium">💡 Quick follow-ups:</p>
+                <div className="flex flex-wrap gap-2">
+                  {currentSuggestions.map((suggestion, index) => (
+                    <Button
+                      key={index}
+                      variant="secondary"
+                      size="sm"
+                      className="text-xs h-auto py-1.5 px-3 hover:bg-secondary/80 rounded-lg"
+                      onClick={() => handleSuggestionClick(suggestion)}
+                    >
+                      {suggestion.length > 45 ? `${suggestion.substring(0, 45)}...` : suggestion}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Input form */}
+          <div className="flex items-end gap-3 bg-background rounded-xl border border-border/40 p-3 shadow-sm">
+            <div className="flex-1">
               <Textarea
-                placeholder="Type your message here..."
+                placeholder="Ask me anything about farming..."
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="flex-1 min-h-[60px] max-h-[120px]"
+                className="min-h-[20px] max-h-[160px] resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 placeholder:text-muted-foreground/60"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault()
@@ -323,12 +346,22 @@ export default function FarmersAssistantPage() {
                   }
                 }}
               />
-              <Button type="submit" size="icon" disabled={isLoading || !prompt.trim()}>
-                {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-              </Button>
-            </form>
-          </CardFooter>
-        </Card>
+            </div>
+            <Button 
+              type="submit" 
+              size="icon" 
+              disabled={isLoading || !prompt.trim()}
+              className="h-9 w-9 rounded-lg"
+              onClick={handleSubmit}
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   )
