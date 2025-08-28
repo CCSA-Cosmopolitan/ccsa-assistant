@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
-import { Loader2, Send, RefreshCw } from "lucide-react"
+import { Loader2, Send, RefreshCw, MessageSquare } from "lucide-react"
 import { generateFarmersAssistantResponse } from "@/actions/ai"
 import { Markdown } from "@/components/ui/markdown"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -17,6 +17,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 type Message = {
   role: "user" | "assistant"
   content: string
+  suggestions?: string[]
 }
 
 export default function FarmersAssistantPage() {
@@ -28,6 +29,44 @@ export default function FarmersAssistantPage() {
   const [prompt, setPrompt] = useState("")
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [currentSuggestions, setCurrentSuggestions] = useState<string[]>([])
+  const [lastActivity, setLastActivity] = useState<string | null>(null)
+
+  // Load conversation from localStorage on mount
+  useEffect(() => {
+    const savedConversation = localStorage.getItem('farmers-assistant-conversation')
+    if (savedConversation) {
+      try {
+        const parsed = JSON.parse(savedConversation)
+        setMessages(parsed.messages || [])
+        setCurrentSuggestions(parsed.suggestions || [])
+        if (parsed.timestamp) {
+          const lastDate = new Date(parsed.timestamp)
+          setLastActivity(lastDate.toLocaleDateString() + ' at ' + lastDate.toLocaleTimeString())
+        }
+      } catch (error) {
+        console.error('Failed to load conversation:', error)
+      }
+    }
+  }, [])
+
+  // Save conversation to localStorage whenever messages change
+  useEffect(() => {
+    if (messages.length > 0) {
+      const timestamp = Date.now()
+      localStorage.setItem('farmers-assistant-conversation', JSON.stringify({
+        messages,
+        suggestions: currentSuggestions,
+        timestamp
+      }))
+      const lastDate = new Date(timestamp)
+      setLastActivity(lastDate.toLocaleDateString() + ' at ' + lastDate.toLocaleTimeString())
+    }
+  }, [messages, currentSuggestions])
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setPrompt(suggestion)
+  }
 
   useEffect(() => {
     scrollToBottom()
@@ -51,14 +90,18 @@ export default function FarmersAssistantPage() {
 
     const userMessage: Message = { role: "user", content: prompt }
     setMessages((prev) => [...prev, userMessage])
+    setCurrentSuggestions([]) // Clear current suggestions when user sends a message
     setIsLoading(true)
     setPrompt("")
 
     try {
-      // Create conversation history for context
-      const conversationHistory = messages.map((msg) => `${msg.role}: ${msg.content}`).join("\n")
+      // Create conversation history for context (last 6 messages to avoid token limits)
+      const recentMessages = messages.slice(-6)
+      const conversationHistory = recentMessages.length > 0 
+        ? recentMessages.map((msg) => `${msg.role}: ${msg.content}`).join("\n")
+        : undefined
 
-      const result = await generateFarmersAssistantResponse(prompt, language)
+      const result = await generateFarmersAssistantResponse(prompt, language, conversationHistory)
 
       if (result.error) {
         toast({
@@ -69,8 +112,13 @@ export default function FarmersAssistantPage() {
         return
       }
 
-      const assistantMessage: Message = { role: "assistant", content: result.text || "" }
+      const assistantMessage: Message = { 
+        role: "assistant", 
+        content: result.text || "",
+        suggestions: result.suggestions || []
+      }
       setMessages((prev) => [...prev, assistantMessage])
+      setCurrentSuggestions(result.suggestions || [])
     } catch (error) {
       toast({
         title: "Error",
@@ -85,6 +133,13 @@ export default function FarmersAssistantPage() {
 
   const handleReset = () => {
     setMessages([])
+    setCurrentSuggestions([])
+    setLastActivity(null)
+    localStorage.removeItem('farmers-assistant-conversation')
+    toast({
+      title: "Conversation Reset",
+      description: "Your conversation history has been cleared.",
+    })
   }
 
   return (
@@ -101,8 +156,22 @@ export default function FarmersAssistantPage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Conversation</CardTitle>
-                <CardDescription>Our AI assistant can answer questions about farming in Nigeria.</CardDescription>
+                <CardTitle className="flex items-center gap-2">
+                  Conversation
+                  {messages.length > 0 && (
+                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                      {Math.ceil(messages.length / 2)} exchanges
+                    </span>
+                  )}
+                </CardTitle>
+                <CardDescription>
+                  Our AI assistant can answer questions about farming in Nigeria and remembers your conversation.
+                  {lastActivity && (
+                    <span className="block text-xs text-muted-foreground/70 mt-1">
+                      Last active: {lastActivity}
+                    </span>
+                  )}
+                </CardDescription>
               </div>
               <div className="flex items-center gap-2">
                 <Select value={language} onValueChange={setLanguage}>
@@ -127,9 +196,32 @@ export default function FarmersAssistantPage() {
             <ScrollArea className="h-full pr-4">
               {messages.length === 0 ? (
                 <div className="flex h-full items-center justify-center text-center p-8">
-                  <div className="space-y-2">
+                  <div className="space-y-4">
                     <h3 className="text-lg font-medium">Start a conversation</h3>
                     <p className="text-sm text-muted-foreground">Ask any farming related question to get started.</p>
+                    
+                    {/* Initial suggested questions */}
+                    <div className="mt-6">
+                      <p className="text-sm text-muted-foreground mb-3">Try asking about:</p>
+                      <div className="grid gap-2 max-w-md">
+                        {[
+                          "What are the best crops to plant during rainy season in Nigeria?",
+                          "How can I prevent pests from attacking my tomato plants?",
+                          "What fertilizers work best for cassava farming?",
+                          "When is the best time to harvest maize?"
+                        ].map((question, index) => (
+                          <Button
+                            key={index}
+                            variant="outline"
+                            className="text-left h-auto p-3 whitespace-normal"
+                            onClick={() => handleSuggestionClick(question)}
+                          >
+                            <MessageSquare className="h-4 w-4 mr-2 flex-shrink-0" />
+                            <span className="text-sm">{question}</span>
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -156,11 +248,33 @@ export default function FarmersAssistantPage() {
                           }`}
                         >
                           {message.role === "assistant" ? (
-                            <Markdown
-                              content={message.content}
-                              // @ts-ignore
-                              className={message.role === "user" ? "text-primary-foreground" : ""}
-                            />
+                            <div className="space-y-4">
+                              <Markdown
+                                content={message.content}
+                                // @ts-ignore
+                                className={message.role === "user" ? "text-primary-foreground" : ""}
+                              />
+                              {/* Display follow-up suggestions */}
+                              {message.suggestions && message.suggestions.length > 0 && (
+                                <div className="mt-4 pt-4 border-t border-border/50">
+                                  <p className="text-sm text-muted-foreground mb-2">💡 You might also want to ask:</p>
+                                  <div className="space-y-1">
+                                    {message.suggestions.map((suggestion, suggestionIndex) => (
+                                      <Button
+                                        key={suggestionIndex}
+                                        variant="ghost"
+                                        size="sm"
+                                        className="text-left h-auto p-2 whitespace-normal w-full justify-start text-xs"
+                                        onClick={() => handleSuggestionClick(suggestion)}
+                                      >
+                                        <MessageSquare className="h-3 w-3 mr-2 flex-shrink-0" />
+                                        {suggestion}
+                                      </Button>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
                           ) : (
                             <p>{message.content}</p>
                           )}
@@ -174,6 +288,28 @@ export default function FarmersAssistantPage() {
             </ScrollArea>
           </CardContent>
           <CardFooter className="border-t pt-4">
+            {/* Current suggestions display */}
+            {currentSuggestions.length > 0 && !isLoading && (
+              <div className="w-full mb-4">
+                <div className="bg-accent/50 rounded-lg p-3">
+                  <p className="text-sm font-medium text-muted-foreground mb-2">💡 Quick follow-ups:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {currentSuggestions.map((suggestion, index) => (
+                      <Button
+                        key={index}
+                        variant="secondary"
+                        size="sm"
+                        className="text-xs h-auto py-1 px-2"
+                        onClick={() => handleSuggestionClick(suggestion)}
+                      >
+                        {suggestion.length > 60 ? `${suggestion.substring(0, 60)}...` : suggestion}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+            
             <form onSubmit={handleSubmit} className="flex w-full items-center space-x-2">
               <Textarea
                 placeholder="Type your message here..."
