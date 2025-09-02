@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
-import { Loader2, Send, RefreshCw, MessageSquare } from "lucide-react"
+import { Loader2, Send, RefreshCw, MessageSquare, History, Plus, Trash2 } from "lucide-react"
 import { generateFarmersAssistantResponse } from "@/actions/ai"
 import { Markdown } from "@/components/ui/markdown"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -21,6 +21,14 @@ type Message = {
   suggestions?: string[]
 }
 
+type ChatHistory = {
+  id: string
+  title: string
+  messages: Message[]
+  suggestions: string[]
+  timestamp: number
+}
+
 export default function FarmersAssistantPage() {
   const { data: session } = useSession()
   const { toast } = useToast()
@@ -31,39 +39,133 @@ export default function FarmersAssistantPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [currentSuggestions, setCurrentSuggestions] = useState<string[]>([])
-  const [lastActivity, setLastActivity] = useState<string | null>(null)
+  const [chatHistory, setChatHistory] = useState<ChatHistory[]>([])
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null)
+  const [showHistory, setShowHistory] = useState(false)
 
-  // Load conversation from localStorage on mount
+  // Load chat history from localStorage on mount
   useEffect(() => {
-    const savedConversation = localStorage.getItem('farmers-assistant-conversation')
-    if (savedConversation) {
+    // Migrate old single conversation format to new history format
+    const oldConversation = localStorage.getItem('farmers-assistant-conversation')
+    if (oldConversation) {
       try {
-        const parsed = JSON.parse(savedConversation)
-        setMessages(parsed.messages || [])
-        setCurrentSuggestions(parsed.suggestions || [])
-        if (parsed.timestamp) {
-          const lastDate = new Date(parsed.timestamp)
-          setLastActivity(lastDate.toLocaleDateString() + ' at ' + lastDate.toLocaleTimeString())
+        const parsed = JSON.parse(oldConversation)
+        if (parsed.messages && parsed.messages.length > 0) {
+          const migratedChat: ChatHistory = {
+            id: 'migrated-' + Date.now(),
+            title: generateChatTitle(parsed.messages.find((m: Message) => m.role === 'user')?.content || 'Previous Chat'),
+            messages: parsed.messages,
+            suggestions: parsed.suggestions || [],
+            timestamp: Date.now()
+          }
+          setChatHistory([migratedChat])
+          localStorage.removeItem('farmers-assistant-conversation') // Remove old format
         }
       } catch (error) {
-        console.error('Failed to load conversation:', error)
+        console.error('Failed to migrate old conversation:', error)
+      }
+    }
+
+    // Load existing chat history
+    const savedHistory = localStorage.getItem('farmers-assistant-history')
+    if (savedHistory) {
+      try {
+        const parsed = JSON.parse(savedHistory)
+        setChatHistory(prev => prev.length > 0 ? prev : (parsed || []))
+      } catch (error) {
+        console.error('Failed to load chat history:', error)
       }
     }
   }, [])
 
-  // Save conversation to localStorage whenever messages change
+  // Save chat history to localStorage whenever it changes
+  useEffect(() => {
+    if (chatHistory.length > 0) {
+      localStorage.setItem('farmers-assistant-history', JSON.stringify(chatHistory))
+    }
+  }, [chatHistory])
+
+  // Generate chat title from first message
+  const generateChatTitle = (firstMessage: string): string => {
+    const words = firstMessage.trim().split(' ')
+    return words.slice(0, 6).join(' ') + (words.length > 6 ? '...' : '')
+  }
+
+  // Create new chat
+  const createNewChat = () => {
+    if (messages.length > 0) {
+      // Save current chat to history before creating new one
+      const chatId = currentChatId || Date.now().toString()
+      const title = generateChatTitle(messages.find(m => m.role === 'user')?.content || 'New Chat')
+      
+      const newChat: ChatHistory = {
+        id: chatId,
+        title,
+        messages: [...messages],
+        suggestions: [...currentSuggestions],
+        timestamp: Date.now()
+      }
+
+      setChatHistory(prev => {
+        const existing = prev.find(chat => chat.id === chatId)
+        if (existing) {
+          return prev.map(chat => chat.id === chatId ? newChat : chat)
+        }
+        return [newChat, ...prev]
+      })
+    }
+
+    // Reset to new chat
+    setMessages([])
+    setCurrentSuggestions([])
+    setCurrentChatId(null)
+  }
+
+  // Load a specific chat from history
+  const loadChat = (chat: ChatHistory) => {
+    setMessages(chat.messages)
+    setCurrentSuggestions(chat.suggestions)
+    setCurrentChatId(chat.id)
+    setShowHistory(false)
+  }
+
+  // Delete a chat from history
+  const deleteChat = (chatId: string) => {
+    setChatHistory(prev => prev.filter(chat => chat.id !== chatId))
+    if (currentChatId === chatId) {
+      setMessages([])
+      setCurrentSuggestions([])
+      setCurrentChatId(null)
+    }
+  }
+
+  // Save current chat when messages change
   useEffect(() => {
     if (messages.length > 0) {
-      const timestamp = Date.now()
-      localStorage.setItem('farmers-assistant-conversation', JSON.stringify({
-        messages,
-        suggestions: currentSuggestions,
-        timestamp
-      }))
-      const lastDate = new Date(timestamp)
-      setLastActivity(lastDate.toLocaleDateString() + ' at ' + lastDate.toLocaleTimeString())
+      const chatId = currentChatId || Date.now().toString()
+      if (!currentChatId) {
+        setCurrentChatId(chatId)
+      }
+
+      const title = generateChatTitle(messages.find(m => m.role === 'user')?.content || 'New Chat')
+      
+      const updatedChat: ChatHistory = {
+        id: chatId,
+        title,
+        messages: [...messages],
+        suggestions: [...currentSuggestions],
+        timestamp: Date.now()
+      }
+
+      setChatHistory(prev => {
+        const existing = prev.find(chat => chat.id === chatId)
+        if (existing) {
+          return prev.map(chat => chat.id === chatId ? updatedChat : chat)
+        }
+        return [updatedChat, ...prev]
+      })
     }
-  }, [messages, currentSuggestions])
+  }, [messages, currentSuggestions, currentChatId])
 
   const handleSuggestionClick = (suggestion: string) => {
     setPrompt(suggestion)
@@ -102,12 +204,37 @@ export default function FarmersAssistantPage() {
         ? recentMessages.map((msg) => `${msg.role}: ${msg.content}`).join("\n")
         : undefined
 
+      console.log("🚀 Sending request to AI...", {
+        promptLength: prompt.length,
+        language,
+        hasHistory: !!conversationHistory,
+        timestamp: new Date().toISOString()
+      });
+
       const result = await generateFarmersAssistantResponse(prompt, language, conversationHistory)
 
+      console.log("📥 Received response from AI:", {
+        hasError: !!result.error,
+        hasText: !!result.text,
+        hasSuggestions: !!result.suggestions,
+        suggestionsCount: result.suggestions?.length || 0
+      });
+
       if (result.error) {
+        console.error("❌ AI Error:", result.error);
         toast({
-          title: "Error",
+          title: "AI Response Error",
           description: result.error,
+          variant: "destructive",
+        })
+        return
+      }
+
+      if (!result.text) {
+        console.error("❌ Empty response from AI");
+        toast({
+          title: "Empty Response",
+          description: "Received an empty response from AI. Please try again.",
           variant: "destructive",
         })
         return
@@ -120,58 +247,165 @@ export default function FarmersAssistantPage() {
       }
       setMessages((prev) => [...prev, assistantMessage])
       setCurrentSuggestions(result.suggestions || [])
-    } catch (error) {
+      
+      console.log("✅ Message added to conversation successfully");
+    } catch (error: any) {
+      console.error("❌ Frontend error:", {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+        timestamp: new Date().toISOString()
+      });
+      
+      let errorMessage = "Failed to generate response. Please try again."
+      
+      // Handle specific error types
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        errorMessage = "Network error. Please check your internet connection and try again."
+      } else if (error.message.includes('timeout')) {
+        errorMessage = "Request timed out. Please try again with a shorter message."
+      } else if (error.message.includes('JSON')) {
+        errorMessage = "Server response error. Please try again."
+      }
+      
       toast({
-        title: "Error",
-        description: "Failed to generate response. Please try again.",
+        title: "Connection Error",
+        description: errorMessage,
         variant: "destructive",
       })
-      console.error(error)
     } finally {
       setIsLoading(false)
     }
   }
 
   const handleReset = () => {
-    setMessages([])
-    setCurrentSuggestions([])
-    setLastActivity(null)
-    localStorage.removeItem('farmers-assistant-conversation')
+    createNewChat()
     toast({
-      title: "Conversation Reset",
-      description: "Your conversation history has been cleared.",
+      title: "New Chat Started",
+      description: "Previous conversation saved to history.",
     })
   }
 
   return (
-    <div className="flex h-screen w-full flex-col">
-      <AiPageHeader 
-        title="Farmers Assistant"
-        description="Chat with our AI assistant in your preferred Nigerian language"
-        language={language}
-        onLanguageChange={setLanguage}
-      />
+    <div className="flex h-screen w-full">
+      {/* Chat History Sidebar */}
+      <div className={`${showHistory ? 'w-80' : 'w-0'} transition-all duration-300 overflow-hidden border-r border-border/40 bg-background/50`}>
+        <div className="h-full flex flex-col">
+          <div className="p-4 border-b border-border/40">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-sm">Chat History</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={createNewChat}
+                className="h-8 px-2"
+              >
+                <Plus className="h-4 w-4" />
+                New
+              </Button>
+            </div>
+          </div>
+          
+          <ScrollArea className="flex-1 p-2">
+            <div className="space-y-1">
+              {chatHistory.map((chat) => (
+                <div
+                  key={chat.id}
+                  className={`group relative rounded-lg p-3 cursor-pointer transition-colors hover:bg-accent/50 ${
+                    currentChatId === chat.id ? 'bg-accent' : ''
+                  }`}
+                  onClick={() => loadChat(chat)}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{chat.title}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {Math.ceil(chat.messages.length / 2)} exchanges
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(chat.timestamp).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="opacity-0 group-hover:opacity-100 h-6 w-6 p-0 hover:bg-destructive hover:text-destructive-foreground"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        deleteChat(chat.id)
+                      }}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+              
+              {chatHistory.length === 0 && (
+                <div className="text-center py-8 text-sm text-muted-foreground">
+                  No chat history yet
+                </div>
+              )}
+            </div>
+          </ScrollArea>
+        </div>
+      </div>
 
-      {/* Additional header info */}
-      {messages.length > 0 && (
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col">
+        <AiPageHeader 
+          title="Farmers Assistant"
+          description="Chat with our AI assistant in your preferred Nigerian language"
+          language={language}
+          onLanguageChange={setLanguage}
+        />
+
+        {/* Additional header info */}
         <div className="px-6 py-2 border-b border-border/20 bg-muted/30">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">
-              {Math.ceil(messages.length / 2)} exchanges • Last activity: {lastActivity}
-            </span>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handleReset} 
-              title="Reset conversation"
-              className="h-6 px-2 text-xs"
-            >
-              <RefreshCw className="h-3 w-3 mr-1" />
-              Reset
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowHistory(!showHistory)}
+                className="h-6 px-2 text-xs"
+              >
+                <History className="h-3 w-3 mr-1" />
+                History
+              </Button>
+              {messages.length > 0 && (
+                <span className="text-xs text-muted-foreground">
+                  {Math.ceil(messages.length / 2)} exchanges
+                </span>
+              )}
+            </div>
+            
+            <div className="flex items-center gap-1">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={createNewChat} 
+                title="Start new chat"
+                className="h-6 px-2 text-xs"
+              >
+                <Plus className="h-3 w-3 mr-1" />
+                New Chat
+              </Button>
+              {messages.length > 0 && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={handleReset} 
+                  title="Reset current chat"
+                  className="h-6 px-2 text-xs"
+                >
+                  <RefreshCw className="h-3 w-3 mr-1" />
+                  Reset
+                </Button>
+              )}
+            </div>
           </div>
         </div>
-      )}
 
       {/* Messages Area */}
       <div className="flex-1 overflow-hidden">
@@ -336,6 +570,7 @@ export default function FarmersAssistantPage() {
               )}
             </Button>
           </div>
+        </div>
         </div>
       </div>
     </div>

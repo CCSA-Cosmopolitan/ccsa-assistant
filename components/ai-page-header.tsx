@@ -19,7 +19,7 @@ export function AiPageHeader({
   showLanguageSelector = true 
 }: AiPageHeaderProps) {
   return (
-    <div className="sticky top-0 z-50 bg-white bg-background/80 backdrop-blur-xl border-b border-border/40">
+    <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
       <div className="px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex-1">

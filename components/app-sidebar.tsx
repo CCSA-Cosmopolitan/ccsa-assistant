@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
 import { useTheme } from "next-themes"
+import { useEffect, useState } from "react"
 import { BarChart3, Home, Leaf, LogOut, MessageSquare, Settings, Users, Wallet, Sun, Moon } from "lucide-react"
 import {
   Sidebar,
@@ -26,7 +27,13 @@ export function AppSidebar() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
   const isAdmin = session?.user?.role === "ADMIN"
+
+  // Prevent hydration mismatch by only rendering after mount
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const userRoutes = [
     {
@@ -127,10 +134,14 @@ export function AppSidebar() {
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="h-8 w-8"
             >
-              {theme === "dark" ? (
-                <Sun className="h-4 w-4" />
+              {mounted ? (
+                theme === "dark" ? (
+                  <Sun className="h-4 w-4" />
+                ) : (
+                  <Moon className="h-4 w-4" />
+                )
               ) : (
-                <Moon className="h-4 w-4" />
+                <div className="h-4 w-4" /> // Empty placeholder during hydration
               )}
               <span className="sr-only">Toggle theme</span>
             </Button>

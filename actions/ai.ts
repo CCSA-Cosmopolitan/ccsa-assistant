@@ -92,14 +92,36 @@ export async function getUserPrompts() {
 }
 
 export async function generateFarmersAssistantResponse(prompt: string, language: string, conversationHistory?: string) {
+  console.log("🌾 Starting farmers assistant response generation", {
+    promptLength: prompt.length,
+    language,
+    hasHistory: !!conversationHistory,
+    timestamp: new Date().toISOString()
+  });
+
   const session = await getServerSession()
 
   if (!session?.user?.id) {
+    console.error("❌ Unauthorized: No user session");
     return { error: "Unauthorized" }
   }
 
+  console.log("✅ User authenticated", { userId: session.user.id, userRole: session.user.role });
+
   try {
+    // Validate environment variables
+    if (!process.env.OPENAI_API_KEY) {
+      console.error("❌ Missing OPENAI_API_KEY environment variable");
+      return { error: "Server configuration error: Missing API key" }
+    }
+
+    console.log("✅ OpenAI API key present", { 
+      keyPrefix: process.env.OPENAI_API_KEY.substring(0, 10),
+      keyLength: process.env.OPENAI_API_KEY.length
+    });
+
     // Check if user has reached free tier limit
+    console.log("🔍 Checking user prompt count...");
     const promptCount = await db.prompt.count({
       where: { userId: session.user.id },
     })
@@ -109,11 +131,20 @@ export async function generateFarmersAssistantResponse(prompt: string, language:
     })
 
     if (!user) {
+      console.error("❌ User not found in database", { userId: session.user.id });
       return { error: "User not found!" }
     }
 
+    console.log("✅ User found", { 
+      userId: user.id, 
+      promptCount, 
+      walletBalance: user.walletBalance,
+      userRole: session.user.role 
+    });
+
     // If user is not admin, has used 3 or more prompts, and has no wallet balance
     if (session.user.role !== "ADMIN" && promptCount >= 3 && user.walletBalance <= 0) {
+      console.warn("⚠️ User reached free tier limit", { promptCount, walletBalance: user.walletBalance });
       return { error: "You've reached your free tier limit. Please upgrade your account to continue." }
     }
 
@@ -140,11 +171,26 @@ FOLLOW_UP_SUGGESTIONS:
       systemPrompt += ` Please respond in ${language}.`
     }
 
+    console.log("🤖 Calling OpenAI API...", {
+      model: "gpt-4o",
+      promptLength: prompt.length,
+      systemPromptLength: systemPrompt.length,
+      language
+    });
+
+    const startTime = Date.now();
     const { text } = await generateText({
       model: openai("gpt-4o"),
       prompt: prompt,
       system: systemPrompt,
     })
+    const endTime = Date.now();
+
+    console.log("✅ OpenAI response received", {
+      responseLength: text.length,
+      duration: `${endTime - startTime}ms`,
+      timestamp: new Date().toISOString()
+    });
 
     // Extract follow-up suggestions from the response
     const suggestionMatch = text.match(/FOLLOW_UP_SUGGESTIONS:\s*([\s\S]*)/i)
@@ -161,9 +207,14 @@ FOLLOW_UP_SUGGESTIONS:
       
       // Remove suggestions from main response
       mainResponse = text.replace(/FOLLOW_UP_SUGGESTIONS:[\s\S]*$/i, '').trim()
+      
+      console.log("✅ Extracted suggestions", { suggestionsCount: suggestions.length });
+    } else {
+      console.log("ℹ️ No follow-up suggestions found in response");
     }
 
     // Save prompt to database
+    console.log("💾 Saving to database...");
     await db.prompt.create({
       data: {
         userId: session.user.id,
@@ -172,10 +223,38 @@ FOLLOW_UP_SUGGESTIONS:
         response: mainResponse,
       },
     })
+    console.log("✅ Response saved to database successfully");
 
     return { text: mainResponse, suggestions }
-  } catch (error) {
-    return { error: "Failed to generate response." }
+  } catch (error: any) {
+    console.error("❌ Farmers assistant error:", {
+      message: error.message,
+      name: error.name,
+      stack: error.stack,
+      code: error.code,
+      status: error.status,
+      type: error.type,
+      timestamp: new Date().toISOString()
+    });
+    
+    // Handle specific OpenAI/AI SDK errors
+    if (error.message?.includes('API key')) {
+      return { error: "Invalid API key configuration. Please contact support." }
+    }
+    if (error.message?.includes('rate limit') || error.status === 429) {
+      return { error: "API rate limit exceeded. Please try again in a few moments." }
+    }
+    if (error.message?.includes('network') || error.code === 'ENOTFOUND') {
+      return { error: "Network error. Please check your internet connection and try again." }
+    }
+    if (error.status === 500 || error.status === 502 || error.status === 503) {
+      return { error: "AI service temporarily unavailable. Please try again later." }
+    }
+    if (error.status === 401) {
+      return { error: "Authentication failed. Please contact support." }
+    }
+    
+    return { error: "Something went wrong. Please try again later." }
   }
 }
 
