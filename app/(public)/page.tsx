@@ -112,7 +112,7 @@ export default function Home() {
         </section>
 
         {/* Pricing Section */}
-        <section className="py-16 md:py-24 bg-secondary/30">
+        {/* <section className="py-16 md:py-24 bg-secondary/30">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -128,7 +128,7 @@ export default function Home() {
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-12">
-              {/* Free Tier */}
+ 
               <div className="flex flex-col rounded-lg border border-border/40 shadow-sm transition-all hover:shadow-card-hover">
                 <div className="p-6">
                   <h3 className="text-2xl font-bold">Free</h3>
@@ -157,7 +157,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              {/* Standard Tier */}
+
               <div className="flex flex-col rounded-lg border border-primary/30 bg-primary/5 shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-medium">
                   Popular
@@ -193,7 +193,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              {/* Premium Tier */}
+
               <div className="flex flex-col rounded-lg border border-border/40 shadow-sm transition-all hover:shadow-card-hover">
                 <div className="p-6">
                   <h3 className="text-2xl font-bold">Premium</h3>
@@ -228,7 +228,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Testimonials */}
         {/* <section className="py-16 md:py-24 bg-background">
