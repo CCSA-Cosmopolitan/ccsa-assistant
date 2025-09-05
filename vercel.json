@@ -4,5 +4,10 @@
         "NODE_OPTIONS": "--max_old_space_size=4096"
       }
     },
-    "framework": "nextjs"
+    "framework": "nextjs",
+    "functions": {
+      "app/api/farmers-assistant/route.ts": {
+        "maxDuration": 30
+      }
+    }
   }

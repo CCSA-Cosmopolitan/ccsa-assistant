@@ -75,7 +75,7 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="gradient-card border-border/40 shadow-sm transition-all hover:shadow-card-hover">
+        <Card className=" border-border/40 shadow-sm transition-all hover:shadow-card-hover">
           <CardHeader>
             <div className="flex items-center gap-2">
               <div className="rounded-full bg-primary/10 p-2">

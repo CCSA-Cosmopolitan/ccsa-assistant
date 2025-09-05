@@ -22,7 +22,7 @@ const PublicNavigation = () => {
 
       <div className="flex items-center gap-2">
         <Leaf className="h-6 w-6 text-green-600" />
-        <span className="text-xl font-bold">CCSA FarmAI</span>
+        <span className="text-xl font-bold">CCSA AI</span>
       </div>
 
       <nav className="hidden md:flex items-center gap-6">
@@ -31,7 +31,7 @@ const PublicNavigation = () => {
         <Leaf className="h-6 w-6 text-primary" />
         <span className="text-xl font-bold">CCSA FarmAI</span>
       </div> */}
-      <nav className="hidden md:flex items-center gap-6">
+      {/* <nav className="hidden md:flex items-center gap-6">
         <Link
           href="/"
           className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
@@ -56,7 +56,7 @@ const PublicNavigation = () => {
         >
           Partnerships
         </Link>
-      </nav>
+      </nav> */}
       {/* <div className="flex items-center gap-4">
         <Link href="/login">
           <Button variant="outline">Log In</Button>

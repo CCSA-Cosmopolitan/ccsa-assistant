@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { Loader2, Send, RefreshCw, MessageSquare, History, Plus, Trash2 } from "lucide-react"
-import { generateFarmersAssistantResponse } from "@/actions/ai"
 import { Markdown } from "@/components/ui/markdown"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -204,20 +203,39 @@ export default function FarmersAssistantPage() {
         ? recentMessages.map((msg) => `${msg.role}: ${msg.content}`).join("\n")
         : undefined
 
-      console.log("🚀 Sending request to AI...", {
+      console.log("🚀 Sending request to AI API...", {
         promptLength: prompt.length,
         language,
         hasHistory: !!conversationHistory,
         timestamp: new Date().toISOString()
       });
 
-      const result = await generateFarmersAssistantResponse(prompt, language, conversationHistory)
+      // Call the API route instead of server action
+      const response = await fetch('/api/farmers-assistant', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt,
+          language,
+          conversationHistory
+        }),
+      })
 
-      console.log("📥 Received response from AI:", {
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`)
+      }
+
+      const result = await response.json()
+
+      console.log("📥 Received response from AI API:", {
         hasError: !!result.error,
         hasText: !!result.text,
         hasSuggestions: !!result.suggestions,
-        suggestionsCount: result.suggestions?.length || 0
+        suggestionsCount: result.suggestions?.length || 0,
+        duration: result.duration
       });
 
       if (result.error) {
@@ -262,10 +280,18 @@ export default function FarmersAssistantPage() {
       // Handle specific error types
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
         errorMessage = "Network error. Please check your internet connection and try again."
-      } else if (error.message.includes('timeout')) {
+      } else if (error.message.includes('timeout') || error.message.includes('took too long')) {
         errorMessage = "Request timed out. Please try again with a shorter message."
       } else if (error.message.includes('JSON')) {
         errorMessage = "Server response error. Please try again."
+      } else if (error.message.includes('HTTP 408')) {
+        errorMessage = "Request timeout. Please try with a shorter or simpler query."
+      } else if (error.message.includes('HTTP 429')) {
+        errorMessage = "Too many requests. Please wait a moment and try again."
+      } else if (error.message.includes('HTTP 503')) {
+        errorMessage = "AI service temporarily unavailable. Please try again later."
+      } else if (error.message) {
+        errorMessage = error.message
       }
       
       toast({

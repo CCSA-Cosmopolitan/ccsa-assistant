@@ -1,5 +1,5 @@
-import type React from "react"
 import PublicNavigation from "@/components/PublicNavigation"
+import type React from "react"
 
 
 
@@ -11,7 +11,7 @@ export default function RootLayout({
 }>) {
   return (
         <div>
-        <PublicNavigation />
+          <PublicNavigation />
           {children}
         </div>
   )

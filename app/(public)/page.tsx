@@ -339,49 +339,47 @@ export default function Home() {
           </div>
         </section> */}
       </main>
-      {/* <footer className="border-t border-border/40 bg-secondary/30">
-        <div className="container flex flex-col gap-6 py-8 md:flex-row md:items-center md:justify-between md:py-12">
-          <div className="flex items-center gap-2">
-            <Leaf className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">CCSA FarmAI</span>
-          </div>
-          <nav className="flex gap-4 md:gap-6">
-            <Link
-              href="/about"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              About Us
-            </Link>
-            <Link
-              href="/contact"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              Contact
-            </Link>
-            <Link
-              href="/partnerships"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              Partnerships
-            </Link>
-            <Link
-              href="/privacy"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              Privacy
-            </Link>
-            <Link
-              href="/terms"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              Terms
-            </Link>
-          </nav>
-          <div className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} CCSA FarmAI. All rights reserved.
+      
+      {/* Minimalistic Footer */}
+      <footer className="border-t border-border/40 bg-background">
+        <div className="container px-4 md:px-6 py-8">
+          <div className="flex flex-col items-center text-center space-y-6">
+            {/* Product Features */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
+              <div className="flex flex-col items-center space-y-1">
+                <MessageSquare className="h-4 w-4 text-primary" />
+                <span>AI Assistant</span>
+              </div>
+              <div className="flex flex-col items-center space-y-1">
+                <BarChart3 className="h-4 w-4 text-primary" />
+                <span>Farm Analysis</span>
+              </div>
+              <div className="flex flex-col items-center space-y-1">
+                <Leaf className="h-4 w-4 text-primary" />
+                <span>Crop Analysis</span>
+              </div>
+              <div className="flex flex-col items-center space-y-1">
+                <Zap className="h-4 w-4 text-primary" />
+                <span>Soil Analysis</span>
+              </div>
+            </div>
+            
+            {/* Brand & Copyright */}
+            <div className="flex flex-col items-center space-y-2">
+              <div className="flex items-center gap-2">
+                <Leaf className="h-5 w-5 text-primary" />
+                <span className="font-semibold text-lg">CCSA FarmAI</span>
+              </div>
+              <p className="text-xs text-muted-foreground max-w-md">
+                AI-powered farming solutions for Nigerian farmers. Maximize yields, reduce costs, and farm sustainably.
+              </p>
+              <div className="text-xs text-muted-foreground">
+                © {new Date().getFullYear()} Center for Climate-Smart Agriculture. All rights reserved.
+              </div>
+            </div>
           </div>
         </div>
-      </footer> */}
+      </footer>
     </div>
   )
 }
