@@ -78,7 +78,7 @@ export function RegisterForm() {
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={isPending} placeholder="John Doe" />
+                      <Input {...field} className=" border-primary" disabled={isPending} placeholder="John Doe" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -91,7 +91,7 @@ export function RegisterForm() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={isPending} placeholder="john.doe@example.com" type="email" />
+                      <Input {...field} className=" border-primary" disabled={isPending} placeholder="john.doe@example.com" type="email" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -104,7 +104,7 @@ export function RegisterForm() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={isPending} placeholder="********" type="password" />
+                      <Input {...field} className=" border-primary" disabled={isPending} placeholder="********" type="password" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -117,7 +117,7 @@ export function RegisterForm() {
                   <FormItem>
                     <FormLabel>Country</FormLabel>
                     <Select disabled={isPending} onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
+                      <FormControl className="border-primary">
                         <SelectTrigger>
                           <SelectValue placeholder="Select your country" />
                         </SelectTrigger>

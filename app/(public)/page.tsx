@@ -7,75 +7,33 @@ import logoGreen from '@/public/green-cosmo.png'
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40">
-        <div className="container flex h-16 items-center justify-between py-4">
-          <div className="flex items-center gap-2">
-            <Leaf className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">CCSA FarmAI</span>
-          </div>
-          <nav className="hidden md:flex items-center gap-6">
-            <Link
-              href="/"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              Home
-            </Link>
-            <Link
-              href="/about"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              About Us
-            </Link>
-            <Link
-              href="/contact"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              Contact
-            </Link>
-            <Link
-              href="/partnerships"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              Partnerships
-            </Link>
-          </nav>
-          <div className="flex items-center gap-4">
-            <Link href="/login">
-              <Button variant="outline">Log In</Button>
-            </Link>
-            <Link href="/register">
-              <Button>Sign Up</Button>
-            </Link>
-          </div>
-        </div>
-      </header>
       <main className="flex-1">
         {/* Hero Section */}
         <section className="py-20 md:py-28 bg-gradient-to-b from-background to-secondary/30">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="space-y-2">
-                  <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-sm text-primary">
+              <div className="flex flex-col items-center md:items-start justify-center space-y-4">
+                <div className="space-y-2 flex flex-col justify-center items-center md:items-start gap-6">
+                  <div className="inline-flex items-center md:items-start max-w-max rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-primary">
                     <span className="animate-pulse-subtle">New</span>
-                    <span className="ml-1">AI-Powered Farming Solutions</span>
+                    <span className="ml-1 ">AI-Powered Farming Solutions</span>
                   </div>
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                    Revolutionizing Nigerian Farming with AI
+                  <h1 className="text-3xl text-center md:text-start font-bold tracking-tighter sm:text-5xl xl:text-5xl/none">
+                   Center for Climate-Smart Agriculture
                   </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                  <p className="max-w-[600px] text-center md:text-start text-green-950 text-muted-foreground text-lg md:text-xl">
                     CCSA FarmAI combines cutting-edge artificial intelligence with agricultural expertise to help
                     Nigerian farmers maximize yields, reduce costs, and farm sustainably.
                   </p>
                 </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                <div className="flex flex-col gap-2 min-[500px]:flex-row">
                   <Link href="/register">
                     <Button size="lg" className="gap-1 group">
                       Get Started <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Button>
                   </Link>
                   <Link href="/about">
-                    <Button size="lg" variant="outline">
+                    <Button size="lg" className=" border-primary w-full" variant="outline">
                       Learn More
                     </Button>
                   </Link>
@@ -154,7 +112,7 @@ export default function Home() {
         </section>
 
         {/* Pricing Section */}
-        <section className="py-16 md:py-24 bg-secondary/30">
+        {/* <section className="py-16 md:py-24 bg-secondary/30">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -170,7 +128,7 @@ export default function Home() {
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-12">
-              {/* Free Tier */}
+ 
               <div className="flex flex-col rounded-lg border border-border/40 shadow-sm transition-all hover:shadow-card-hover">
                 <div className="p-6">
                   <h3 className="text-2xl font-bold">Free</h3>
@@ -199,7 +157,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              {/* Standard Tier */}
+
               <div className="flex flex-col rounded-lg border border-primary/30 bg-primary/5 shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-medium">
                   Popular
@@ -235,7 +193,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              {/* Premium Tier */}
+
               <div className="flex flex-col rounded-lg border border-border/40 shadow-sm transition-all hover:shadow-card-hover">
                 <div className="p-6">
                   <h3 className="text-2xl font-bold">Premium</h3>
@@ -270,7 +228,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Testimonials */}
         {/* <section className="py-16 md:py-24 bg-background">
@@ -381,49 +339,47 @@ export default function Home() {
           </div>
         </section> */}
       </main>
-      {/* <footer className="border-t border-border/40 bg-secondary/30">
-        <div className="container flex flex-col gap-6 py-8 md:flex-row md:items-center md:justify-between md:py-12">
-          <div className="flex items-center gap-2">
-            <Leaf className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">CCSA FarmAI</span>
-          </div>
-          <nav className="flex gap-4 md:gap-6">
-            <Link
-              href="/about"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              About Us
-            </Link>
-            <Link
-              href="/contact"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              Contact
-            </Link>
-            <Link
-              href="/partnerships"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              Partnerships
-            </Link>
-            <Link
-              href="/privacy"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              Privacy
-            </Link>
-            <Link
-              href="/terms"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              Terms
-            </Link>
-          </nav>
-          <div className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} CCSA FarmAI. All rights reserved.
+      
+      {/* Minimalistic Footer */}
+      <footer className="border-t border-border/40 bg-background">
+        <div className="container px-4 md:px-6 py-8">
+          <div className="flex flex-col items-center text-center space-y-6">
+            {/* Product Features */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
+              <div className="flex flex-col items-center space-y-1">
+                <MessageSquare className="h-4 w-4 text-primary" />
+                <span>AI Assistant</span>
+              </div>
+              <div className="flex flex-col items-center space-y-1">
+                <BarChart3 className="h-4 w-4 text-primary" />
+                <span>Farm Analysis</span>
+              </div>
+              <div className="flex flex-col items-center space-y-1">
+                <Leaf className="h-4 w-4 text-primary" />
+                <span>Crop Analysis</span>
+              </div>
+              <div className="flex flex-col items-center space-y-1">
+                <Zap className="h-4 w-4 text-primary" />
+                <span>Soil Analysis</span>
+              </div>
+            </div>
+            
+            {/* Brand & Copyright */}
+            <div className="flex flex-col items-center space-y-2">
+              <div className="flex items-center gap-2">
+                <Leaf className="h-5 w-5 text-primary" />
+                <span className="font-semibold text-lg">CCSA FarmAI</span>
+              </div>
+              <p className="text-xs text-muted-foreground max-w-md">
+                AI-powered farming solutions for Nigerian farmers. Maximize yields, reduce costs, and farm sustainably.
+              </p>
+              <div className="text-xs text-muted-foreground">
+                © {new Date().getFullYear()} Center for Climate-Smart Agriculture. All rights reserved.
+              </div>
+            </div>
           </div>
         </div>
-      </footer> */}
+      </footer>
     </div>
   )
 }

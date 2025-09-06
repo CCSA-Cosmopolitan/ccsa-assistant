@@ -1,14 +1,21 @@
-import { Resend } from "resend"
+import nodemailer from "nodemailer"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Create transporter using Google SMTP
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GOOGLE_EMAIL,
+    pass: process.env.GOOGLE_APP_PASSWORD,
+  },
+})
 
 const domain = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 
 export const sendVerificationEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/verify?token=${token}`
 
-  await resend.emails.send({
-    from: "CCSA FarmAI <noreply@ccsafarmai.com>",
+  await transporter.sendMail({
+    from: `"CCSA FarmAI" <${process.env.GOOGLE_EMAIL}>`,
     to: email,
     subject: "Confirm your email address",
     html: `
@@ -31,8 +38,8 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 export const sendPasswordResetEmail = async (email: string, token: string) => {
   const resetLink = `${domain}/reset-password?token=${token}`
 
-  await resend.emails.send({
-    from: "CCSA FarmAI <noreply@ccsafarmai.com>",
+  await transporter.sendMail({
+    from: `"CCSA FarmAI" <${process.env.GOOGLE_EMAIL}>`,
     to: email,
     subject: "Reset your password",
     html: `

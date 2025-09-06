@@ -14,11 +14,13 @@ import { useToast } from "@/hooks/use-toast"
 import { SoilAnalyzerSchema } from "@/schemas"
 import { Loader2 } from "lucide-react"
 import { generateSoilAnalysis } from "@/actions/ai"
+import { AiPageHeader } from "@/components/ai-page-header"
 
 export default function SoilAnalyzerPage() {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [analysis, setAnalysis] = useState<string | null>(null)
+  const [language, setLanguage] = useState("english")
 
   const form = useForm<z.infer<typeof SoilAnalyzerSchema>>({
     resolver: zodResolver(SoilAnalyzerSchema),
@@ -39,7 +41,7 @@ export default function SoilAnalyzerPage() {
     setAnalysis(null)
 
     try {
-      const result = await generateSoilAnalysis(values)
+      const result = await generateSoilAnalysis(values, language)
 
       if (result.error) {
         toast({
@@ -69,13 +71,16 @@ export default function SoilAnalyzerPage() {
   }
 
   return (
-    <div className="container py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Soil Analyzer</h1>
-        <p className="text-muted-foreground">Analyze your soil conditions to get personalized recommendations.</p>
-      </div>
-
-      <div className="grid gap-6">
+    <div className="min-h-screen w-full mx-auto max-w-4xl flex flex-col">
+      <AiPageHeader 
+        title="Soil Analyzer"
+        description="Analyze your soil conditions to get personalized recommendations"
+        language={language}
+        onLanguageChange={setLanguage}
+      />
+      
+      <div className="flex-1 container py-6">
+        <div className="grid gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Soil Details</CardTitle>
@@ -236,6 +241,7 @@ export default function SoilAnalyzerPage() {
             </CardContent>
           </Card>
         )}
+        </div>
       </div>
     </div>
   )
