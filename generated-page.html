@@ -1,0 +1,546 @@
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>CCSA FarmAI — AI-Powered Farming Solutions</title>
+    <meta name="description" content="CCSA FarmAI combines cutting-edge artificial intelligence with real soil chemistry data to help Nigerian farmers maximize yields, reduce costs, and farm sustainably.">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="antialiased bg-[#0A0E13] text-slate-200 selection:bg-emerald-500/30 selection:text-slate-50" style="font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial">
+    <!-- Backdrop -->
+    <div class="pointer-events-none fixed inset-0 -z-10">
+      <div class="absolute inset-0 bg-[radial-gradient(60%_40%_at_50%_10%,rgba(16,185,129,0.12),transparent_60%)]"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(40%_30%_at_80%_10%,rgba(99,102,241,0.12),transparent_60%)]"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(40%_30%_at_20%_90%,rgba(14,165,233,0.10),transparent_60%)]"></div>
+      <img src="https://images.unsplash.com/photo-1552083375-1447ce886485?q=80&amp;w=2000&amp;auto=format&amp;fit=crop" alt="" class="absolute inset-0 h-full w-full object-cover opacity-[0.04]">
+    </div>
+
+    <!-- Nav -->
+    <header class="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-black/30 bg-black/10">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="flex items-center justify-between py-4">
+          <!-- Logo -->
+          <a href="#" class="group inline-flex items-center gap-3">
+            <div class="grid h-9 w-9 place-items-center rounded-md ring-1 ring-white/10 bg-white/5">
+              <span class="text-[11px] tracking-tighter font-semibold text-white">CC</span>
+            </div>
+            <div class="flex flex-col leading-tight">
+              <span class="text-[13px] uppercase tracking-[0.18em] text-slate-400">Center for</span>
+              <span class="text-[15px] tracking-tight font-semibold text-white">Climate‑Smart Agriculture</span>
+            </div>
+          </a>
+
+          <nav class="hidden md:flex items-center gap-8 text-sm">
+            <a href="#features" class="text-slate-300 hover:text-white transition-colors">Features</a>
+            <a href="#dashboard" class="text-slate-300 hover:text-white transition-colors">Farm AI Dashboard</a>
+            <a href="#about" class="text-slate-300 hover:text-white transition-colors">About</a>
+            <a href="#contact" class="text-slate-300 hover:text-white transition-colors">Contact</a>
+          </nav>
+
+          <div class="flex items-center gap-3">
+            <a href="#" class="inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium text-slate-200 ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition-colors">
+              <i data-lucide="log-in" class="h-4 w-4"></i>
+              Log in
+            </a>
+            <a href="#" class="inline-flex items-center gap-2 rounded-lg bg-emerald-500/90 hover:bg-emerald-400 text-slate-900 px-4 py-2.5 text-sm font-semibold transition-colors">
+              <i data-lucide="rocket" class="h-4 w-4"></i>
+              Get Started
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    </header>
+
+    <!-- Hero -->
+    <section class="relative">
+      <div class="mx-auto max-w-7xl px-6 pt-16 md:pt-20">
+        <div class="grid lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-6 xl:col-span-7">
+            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-slate-300">
+              <span class="inline-flex h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400"></span>
+              <span class="font-medium">New</span>
+              <span class="text-slate-400">AI‑Powered Farming Solutions</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl tracking-tight font-semibold text-white">
+              CCSA FarmAI
+            </h1>
+            <p class="mt-3 text-lg text-slate-300">
+              AI built on real soil chemistry across Nigerian locations—helping you maximize yields, reduce costs, and farm sustainably with up to
+              <span class="text-emerald-400 font-semibold">99% accuracy</span>.
+            </p>
+
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+              <a href="#" class="inline-flex items-center gap-2 rounded-lg bg-white text-slate-900 px-5 py-3 text-sm font-semibold hover:bg-slate-100 transition-colors">
+                <i data-lucide="sparkles" class="h-4 w-4"></i>
+                Get Started
+              </a>
+              <a href="#features" class="inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-medium text-slate-200 ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition-colors">
+                <i data-lucide="play-circle" class="h-4 w-4"></i>
+                Learn More
+              </a>
+            </div>
+
+            <div class="mt-6 flex flex-wrap items-center gap-2">
+              <div class="inline-flex items-center gap-1.5 rounded-md bg-white/5 px-2.5 py-1.5 text-[12px] ring-1 ring-white/10">
+                <i data-lucide="map-pin" class="h-3.5 w-3.5 text-emerald-400"></i>
+                <span class="text-slate-300">Location‑aware soil chemistry</span>
+              </div>
+              <div class="inline-flex items-center gap-1.5 rounded-md bg-white/5 px-2.5 py-1.5 text-[12px] ring-1 ring-white/10">
+                <i data-lucide="languages" class="h-3.5 w-3.5 text-emerald-400"></i>
+                <span class="text-slate-300">Yorùbá, Igbo, Hausa &amp; Pidgin</span>
+              </div>
+              <div class="inline-flex items-center gap-1.5 rounded-md bg-white/5 px-2.5 py-1.5 text-[12px] ring-1 ring-white/10">
+                <i data-lucide="shield-check" class="h-3.5 w-3.5 text-emerald-400"></i>
+                <span class="text-slate-300">Privacy‑first</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-6 xl:col-span-5">
+            <!-- Dashboard preview card -->
+            <div class="relative rounded-2xl ring-1 ring-white/15 bg-gradient-to-b from-white/10 to-transparent p-2">
+              <div class="rounded-xl bg-[#0B1117] ring-1 ring-white/10 overflow-hidden">
+                <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
+                  <div class="flex items-center gap-2">
+                    <div class="h-2.5 w-2.5 rounded-full bg-emerald-400"></div>
+                    <p class="text-[13px] text-slate-300">Farm AI Dashboard</p>
+                  </div>
+                  <div class="flex items-center gap-2 text-[12px] text-slate-400">
+                    <i data-lucide="cloud-rain" class="h-4 w-4"></i>
+                    <span>Rainfall: 12mm</span>
+                    <span class="text-slate-600">|</span>
+                    <i data-lucide="sun" class="h-4 w-4"></i>
+                    <span>UV: Moderate</span>
+                  </div>
+                </div>
+
+                <div class="p-4">
+                  <div class="grid grid-cols-3 gap-3">
+                    <div class="rounded-lg bg-white/5 ring-1 ring-white/10 p-3 hover:bg-white/10 transition-colors">
+                      <div class="flex items-center gap-2 text-slate-300">
+                        <i data-lucide="droplets" class="h-4 w-4 text-emerald-400"></i>
+                        <span class="text-[12px]">Soil Moisture</span>
+                      </div>
+                      <p class="mt-1 text-lg font-semibold tracking-tight text-white">22%</p>
+                      <p class="text-[11px] text-emerald-300/80">Optimal</p>
+                    </div>
+                    <div class="rounded-lg bg-white/5 ring-1 ring-white/10 p-3 hover:bg-white/10 transition-colors">
+                      <div class="flex items-center gap-2 text-slate-300">
+                        <i data-lucide="flask-conical" class="h-4 w-4 text-emerald-400"></i>
+                        <span class="text-[12px]">Soil pH</span>
+                      </div>
+                      <p class="mt-1 text-lg font-semibold tracking-tight text-white">6.4</p>
+                      <p class="text-[11px] text-slate-400">Balanced</p>
+                    </div>
+                    <div class="rounded-lg bg-white/5 ring-1 ring-white/10 p-3 hover:bg-white/10 transition-colors">
+                      <div class="flex items-center gap-2 text-slate-300">
+                        <i data-lucide="sprout" class="h-4 w-4 text-emerald-400"></i>
+                        <span class="text-[12px]">NDVI</span>
+                      </div>
+                      <p class="mt-1 text-lg font-semibold tracking-tight text-white">0.73</p>
+                      <p class="text-[11px] text-emerald-300/80">Healthy</p>
+                    </div>
+                  </div>
+
+                  <div class="mt-4 rounded-lg bg-white/5 ring-1 ring-white/10 p-4">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <h3 class="text-sm font-semibold tracking-tight text-white">Yield Forecast</h3>
+                        <p class="text-[12px] text-slate-400">Next 12 weeks (maize, Kaduna)</p>
+                      </div>
+                      <div class="inline-flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-1 ring-1 ring-emerald-500/20">
+                        <i data-lucide="check-circle-2" class="h-4 w-4 text-emerald-400"></i>
+                        <span class="text-[12px] text-emerald-300">99% model confidence</span>
+                      </div>
+                    </div>
+                    <div class="mt-3 overflow-hidden rounded-md bg-[#0C131A] ring-1 ring-white/5">
+                      <div class="p-2">
+                        <div class="relative h-40 w-full">
+                          <div class="absolute inset-0">
+                            <div class="h-full w-full">
+                              <div class="h-full w-full p-2">
+                                <div class="h-full w-full">
+                                  <div class="h-full w-full">
+                                    <div class="h-full w-full">
+                                      <div class="h-full w-full">
+                                        <div class="h-full w-full">
+                                          <div class="h-full w-full">
+                                            <div class="h-full w-full">
+                                              <div class="h-full w-full">
+                                                <div class="h-full w-full">
+                                                  <div class="h-full w-full">
+                                                    <div class="h-full w-full">
+                                                      <div class="h-full w-full">
+                                                        <div class="h-full w-full">
+                                                          <div class="h-full w-full">
+                                                            <div class="h-full w-full">
+                                                              <div class="h-full w-full">
+                                                                <div class="h-full w-full">
+                                                                  <div class="h-full w-full">
+                                                                    <div class="h-full w-full">
+                                                                      <div class="h-full w-full">
+                                                                        <div class="h-full w-full">
+                                                                          <div class="h-full w-full">
+                                                                            <div class="h-full w-full">
+                                                                              <div class="h-full w-full">
+                                                                                <div class="h-full w-full">
+                                                                                  <div class="h-full w-full">
+                                                                                    <div class="h-full w-full">
+                                                                                      <div class="h-full w-full">
+                                                                                        <div class="h-full w-full">
+                                                                                          <div class="h-full w-full">
+                                                                                            <!-- Chart container wrapper > canvas (fix growth bug) -->
+                                                                                            <div class="relative h-36">
+                                                                                              <canvas id="yieldChart"></canvas>
+                                                                                            </div>
+                                                                                            <!-- end wrapper -->
+                                                                                          </div>
+                                                                                        </div>
+                                                                                      </div>
+                                                                                    </div>
+                                                                                  </div>
+                                                                                </div>
+                                                                              </div>
+                                                                            </div>
+                                                                          </div>
+                                                                        </div>
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="flex items-center justify-between border-t border-white/5 px-3 py-2">
+                        <div class="text-[12px] text-slate-400">Soil &amp; weather co‑variates tuned by region</div>
+                        <div class="inline-flex items-center gap-1 text-[12px] text-slate-300">
+                          <i data-lucide="map" class="h-4 w-4 text-emerald-400"></i>
+                          <span>Kaduna North</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-3 grid grid-cols-2 gap-3">
+                    <button class="group inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500/90 hover:bg-emerald-400 text-slate-900 px-4 py-2 text-sm font-semibold transition-colors">
+                      <i data-lucide="bot" class="h-4 w-4"></i>
+                      Ask the AI Assistant
+                      <i data-lucide="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-0.5"></i>
+                    </button>
+                    <button class="group inline-flex items-center justify-center gap-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-200 ring-1 ring-white/10 px-4 py-2 text-sm font-medium transition-colors">
+                      <i data-lucide="upload-cloud" class="h-4 w-4"></i>
+                      Upload Crop Image
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="mt-3 text-[12px] text-slate-400">
+              Data sources: soil chemistry panels, micro‑climate models, satellite vegetation indices.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="relative mt-20">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="flex items-end justify-between">
+          <div>
+            <h2 class="text-2xl sm:text-3xl tracking-tight font-semibold text-white">AI‑Powered Farming Solutions</h2>
+            <p class="mt-2 text-slate-300">Our suite of AI tools helps you make data‑driven decisions for your farm.</p>
+          </div>
+          <div class="hidden md:flex items-center gap-2 text-[12px] text-slate-400">
+            <i data-lucide="radar" class="h-4 w-4 text-emerald-400"></i>
+            <span>Real‑time insights</span>
+          </div>
+        </div>
+
+        <div class="mt-8 grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Farmers Assistant -->
+          <div class="group rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:bg-white/10 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="inline-flex h-9 w-9 items-center justify-center rounded-md bg-white/10 ring-1 ring-white/15">
+                <i data-lucide="bot" class="h-4.5 w-4.5 text-emerald-400"></i>
+              </div>
+              <span class="text-[11px] text-emerald-300/90">Assistant</span>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold tracking-tight text-white">Farmers Assistant</h3>
+            <p class="mt-1.5 text-sm text-slate-300">AI chatbot with Nigerian language support to answer all your farming questions.</p>
+            <div class="mt-3 inline-flex flex-wrap gap-1">
+              <span class="rounded-md bg-white/5 px-2 py-1 text-[11px] text-slate-300 ring-1 ring-white/10">Yorùbá</span>
+              <span class="rounded-md bg-white/5 px-2 py-1 text-[11px] text-slate-300 ring-1 ring-white/10">Igbo</span>
+              <span class="rounded-md bg-white/5 px-2 py-1 text-[11px] text-slate-300 ring-1 ring-white/10">Hausa</span>
+              <span class="rounded-md bg-white/5 px-2 py-1 text-[11px] text-slate-300 ring-1 ring-white/10">Pidgin</span>
+            </div>
+            <button class="mt-4 inline-flex items-center gap-2 text-sm text-emerald-300 hover:text-emerald-200">
+              Try Assistant
+              <i data-lucide="arrow-right" class="h-4 w-4"></i>
+            </button>
+          </div>
+
+          <!-- Farm Analyzer -->
+          <div class="group rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:bg-white/10 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="inline-flex h-9 w-9 items-center justify-center rounded-md bg-white/10 ring-1 ring-white/15">
+                <i data-lucide="tractor" class="h-4.5 w-4.5 text-emerald-400"></i>
+              </div>
+              <span class="text-[11px] text-emerald-300/90">Planner</span>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold tracking-tight text-white">Farm Analyzer</h3>
+            <p class="mt-1.5 text-sm text-slate-300">Analyze farm size, soil type, humidity, and other variables for better planning.</p>
+            <ul class="mt-3 space-y-1.5 text-[13px] text-slate-300">
+              <li class="inline-flex items-center gap-2"><i data-lucide="map" class="h-4 w-4 text-emerald-400"></i> Geo‑boundaries &amp; area</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="droplets" class="h-4 w-4 text-emerald-400"></i> Moisture &amp; irrigation windows</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="thermometer-sun" class="h-4 w-4 text-emerald-400"></i> Micro‑climate risk</li>
+            </ul>
+          </div>
+
+          <!-- Crop Analyzer -->
+          <div class="group rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:bg-white/10 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="inline-flex h-9 w-9 items-center justify-center rounded-md bg-white/10 ring-1 ring-white/15">
+                <i data-lucide="image-up" class="h-4.5 w-4.5 text-emerald-400"></i>
+              </div>
+              <span class="text-[11px] text-emerald-300/90">Vision</span>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold tracking-tight text-white">Crop Analyzer</h3>
+            <p class="mt-1.5 text-sm text-slate-300">Upload crop images for detailed analysis of nutritional value and growing methods.</p>
+            <div class="mt-3 grid grid-cols-2 gap-2">
+              <div class="rounded-lg bg-[url('https://images.unsplash.com/photo-1599586120429-412c30e91b60?q=80&amp;w=1200&amp;auto=format&amp;fit=crop')] bg-cover bg-center h-16 ring-1 ring-white/10"></div>
+              <div class="rounded-lg bg-[url('https://images.unsplash.com/photo-1590593899216-ef4fe49e13e5?q=80&amp;w=1200&amp;auto=format&amp;fit=crop')] bg-cover bg-center h-16 ring-1 ring-white/10"></div>
+            </div>
+            <button class="mt-4 inline-flex items-center gap-2 text-sm text-emerald-300 hover:text-emerald-200">
+              Analyze a Photo
+              <i data-lucide="arrow-right" class="h-4 w-4"></i>
+            </button>
+          </div>
+
+          <!-- Soil Analyzer -->
+          <div class="group rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:bg-white/10 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="inline-flex h-9 w-9 items-center justify-center rounded-md bg-white/10 ring-1 ring-white/15">
+                <i data-lucide="flask-round" class="h-4.5 w-4.5 text-emerald-400"></i>
+              </div>
+              <span class="text-[11px] text-emerald-300/90">Chemistry</span>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold tracking-tight text-white">Soil Analyzer</h3>
+            <p class="mt-1.5 text-sm text-slate-300">Get detailed soil analysis and recommendations for optimal crop selection.</p>
+            <ul class="mt-3 space-y-1.5 text-[13px] text-slate-300">
+              <li class="inline-flex items-center gap-2"><i data-lucide="beaker" class="h-4 w-4 text-emerald-400"></i> N‑P‑K &amp; micronutrients</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="scroll-text" class="h-4 w-4 text-emerald-400"></i> Amendment recommendations</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="leaf" class="h-4 w-4 text-emerald-400"></i> Crop compatibility</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Coming soon -->
+        <div class="mt-6 rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-2.5 w-2.5 animate-pulse rounded-full bg-indigo-400"></span>
+              <h4 class="text-base font-semibold tracking-tight text-white">Coming soon</h4>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 text-[12px]">
+              <span class="inline-flex items-center gap-1 rounded-md bg-white/5 px-2 py-1 ring-1 ring-white/10 text-slate-300">
+                <i data-lucide="stethoscope" class="h-4 w-4 text-indigo-300"></i> Livestock Doctor
+              </span>
+              <span class="inline-flex items-center gap-1 rounded-md bg-white/5 px-2 py-1 ring-1 ring-white/10 text-slate-300">
+                <i data-lucide="egg" class="h-4 w-4 text-indigo-300"></i> Poultry Suite
+              </span>
+              <span class="inline-flex items-center gap-1 rounded-md bg-white/5 px-2 py-1 ring-1 ring-white/10 text-slate-300">
+                <i data-lucide="scan-line" class="h-4 w-4 text-indigo-300"></i> Pest &amp; Disease Vision
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Value props -->
+    <section id="about" class="relative mt-20">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="grid lg:grid-cols-3 gap-6">
+          <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 p-6 hover:bg-white/10 transition-colors">
+            <div class="inline-flex h-9 w-9 items-center justify-center rounded-md bg-emerald-500/10 ring-1 ring-emerald-500/20">
+              <i data-lucide="target" class="h-4 w-4 text-emerald-400"></i>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold tracking-tight text-white">Built for Nigerian Agriculture</h3>
+            <p class="mt-2 text-sm text-slate-300">Fine‑tuned on local datasets—from soil chemistry to regional climate and crop practices—to deliver accurate, context‑aware guidance.</p>
+          </div>
+          <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 p-6 hover:bg-white/10 transition-colors">
+            <div class="inline-flex h-9 w-9 items-center justify-center rounded-md bg-emerald-500/10 ring-1 ring-emerald-500/20">
+              <i data-lucide="activity" class="h-4 w-4 text-emerald-400"></i>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold tracking-tight text-white">Decisions, Not Dashboards</h3>
+            <p class="mt-2 text-sm text-slate-300">Clear recommendations on when to plant, irrigate, fertilize, and harvest—grounded in your farm’s data.</p>
+          </div>
+          <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 p-6 hover:bg-white/10 transition-colors">
+            <div class="inline-flex h-9 w-9 items-center justify-center rounded-md bg-emerald-500/10 ring-1 ring-emerald-500/20">
+              <i data-lucide="shield" class="h-4 w-4 text-emerald-400"></i>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold tracking-tight text-white">Private and Secure</h3>
+            <p class="mt-2 text-sm text-slate-300">Your farm data stays protected, encrypted in transit and at rest. You control what’s shared.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="relative mt-20">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="rounded-2xl bg-gradient-to-b from-white/10 to-transparent ring-1 ring-white/15 p-2">
+          <div class="rounded-xl bg-[#0B1117] ring-1 ring-white/10 p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div>
+              <h3 class="text-xl md:text-2xl font-semibold tracking-tight text-white">Start with CCSA FarmAI today</h3>
+              <p class="mt-1.5 text-slate-300">AI-powered farming solutions for Nigerian farmers. Maximize yields, reduce costs, and farm sustainably.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <a href="#" class="inline-flex items-center gap-2 rounded-lg bg-white text-slate-900 px-4 py-2.5 text-sm font-semibold hover:bg-slate-100 transition-colors">
+                <i data-lucide="handshake" class="h-4 w-4"></i>
+                Get Started
+              </a>
+              <a href="#" class="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-slate-200 ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition-colors">
+                <i data-lucide="info" class="h-4 w-4"></i>
+                Learn More
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="relative mt-20">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="grid md:grid-cols-4 gap-8 rounded-2xl bg-white/5 ring-1 ring-white/10 p-8">
+          <div class="md:col-span-2">
+            <div class="inline-flex items-center gap-3">
+              <div class="grid h-9 w-9 place-items-center rounded-md ring-1 ring-white/10 bg-white/5">
+                <span class="text-[11px] tracking-tighter font-semibold text-white">CC</span>
+              </div>
+              <div class="flex flex-col leading-tight">
+                <span class="text-[13px] uppercase tracking-[0.18em] text-slate-400">Center for</span>
+                <span class="text-[15px] tracking-tight font-semibold text-white">Climate‑Smart Agriculture</span>
+              </div>
+            </div>
+            <p class="mt-3 text-sm text-slate-300 max-w-md">
+              CCSA FarmAI combines cutting‑edge artificial intelligence with agricultural expertise to help Nigerian farmers maximize yields, reduce costs, and farm sustainably.
+            </p>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold tracking-tight text-white">Product</h4>
+            <ul class="mt-3 space-y-2 text-sm text-slate-300">
+              <li><a href="#features" class="hover:text-white">Features</a></li>
+              <li><a href="#dashboard" class="hover:text-white">Dashboard</a></li>
+              <li><a href="#" class="hover:text-white">Pricing</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold tracking-tight text-white">Support</h4>
+            <ul class="mt-3 space-y-2 text-sm text-slate-300">
+              <li><a href="#" class="hover:text-white">Help Center</a></li>
+              <li><a href="#" class="hover:text-white">Contact</a></li>
+              <li><a href="#" class="hover:text-white">Privacy</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="flex flex-col md:flex-row items-center justify-between py-6 text-sm text-slate-400">
+          <p>© 2025 Center for Climate‑Smart Agriculture. All rights reserved.</p>
+          <div class="mt-3 md:mt-0 inline-flex items-center gap-3">
+            <a href="#" class="inline-flex items-center gap-1 hover:text-slate-200">
+              <i data-lucide="twitter" class="h-4 w-4"></i> X
+            </a>
+            <a href="#" class="inline-flex items-center gap-1 hover:text-slate-200">
+              <i data-lucide="linkedin" class="h-4 w-4"></i> LinkedIn
+            </a>
+            <a href="#" class="inline-flex items-center gap-1 hover:text-slate-200">
+              <i data-lucide="mail" class="h-4 w-4"></i> Email
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      // Icons
+      lucide.createIcons({
+        attrs: { 'stroke-width': 1.5 }
+      });
+
+      // Chart.js
+      window.addEventListener('load', () => {
+        const ctx = document.getElementById('yieldChart');
+        if (!ctx) return;
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Wk1','Wk2','Wk3','Wk4','Wk5','Wk6','Wk7','Wk8','Wk9','Wk10','Wk11','Wk12'],
+            datasets: [{
+              label: 'Predicted Yield (t/ha)',
+              data: [2.1,2.2,2.35,2.4,2.5,2.65,2.8,2.85,2.95,3.05,3.1,3.2],
+              borderColor: 'rgba(16,185,129,1)',
+              backgroundColor: 'rgba(16,185,129,0.15)',
+              pointRadius: 2,
+              pointHoverRadius: 3,
+              borderWidth: 2,
+              tension: 0.35,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                grid: { color: 'rgba(148,163,184,0.08)' },
+                ticks: { color: 'rgba(203,213,225,0.8)', font: { size: 11 } }
+              },
+              y: {
+                grid: { color: 'rgba(148,163,184,0.08)' },
+                ticks: { color: 'rgba(203,213,225,0.8)', font: { size: 11 } }
+              }
+            },
+            plugins: {
+              legend: {
+                labels: { color: 'rgba(226,232,240,0.9)', boxWidth: 10, font: { size: 11 } }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(2,6,23,0.95)',
+                titleColor: '#E2E8F0',
+                bodyColor: '#CBD5E1',
+                borderColor: 'rgba(255,255,255,0.08)',
+                borderWidth: 1
+              }
+            }
+          }
+        });
+      });
+    </script>
+  
+</body></html>

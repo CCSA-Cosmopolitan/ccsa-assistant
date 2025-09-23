@@ -107,8 +107,8 @@ export function LoginForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {emailVerification ? (
-          <div className="bg-yellow-50 p-4 rounded-md border border-yellow-200">
-            <p className="text-sm text-yellow-800 mb-2">{emailVerification.message}</p>
+          <div className="bg-amber-500/10 ring-1 ring-amber-500/20 p-4 rounded-xl">
+            <p className="text-sm text-amber-200 mb-3">{emailVerification.message}</p>
             <div className="flex items-center gap-2">
               <Button
                 type="button"
@@ -116,6 +116,7 @@ export function LoginForm() {
                 size="sm"
                 onClick={handleResendVerificationEmail}
                 disabled={resendingEmail || emailResent}
+                className="border-amber-500/30 text-amber-200 hover:bg-amber-500/10"
               >
                 {resendingEmail ? (
                   <>
@@ -134,17 +135,23 @@ export function LoginForm() {
             </div>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-5">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel className="text-slate-200 font-medium">Email</FormLabel>
                   <FormControl>
-                    <Input {...field} className=" border-primary" disabled={isPending} placeholder="john.doe@example.com" type="email" />
+                    <Input 
+                      {...field} 
+                      className="bg-white/5 border-white/10 text-white placeholder:text-slate-400 focus:border-emerald-400 focus:ring-emerald-400/20" 
+                      disabled={isPending} 
+                      placeholder="john.doe@example.com" 
+                      type="email" 
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -153,35 +160,48 @@ export function LoginForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="text-slate-200 font-medium">Password</FormLabel>
                   <FormControl>
-                    <Input {...field} className=" border-primary" disabled={isPending} placeholder="********" type="password" />
+                    <Input 
+                      {...field} 
+                      className="bg-white/5 border-white/10 text-white placeholder:text-slate-400 focus:border-emerald-400 focus:ring-emerald-400/20" 
+                      disabled={isPending} 
+                      placeholder="Enter your password" 
+                      type="password" 
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
           </div>
         )}
+        
         <div className="flex items-center justify-end">
-          <Link href="/forgot-password" className="text-sm font-medium text-primary hover:underline">
+          <Link href="/forgot-password" className="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
             Forgot password?
           </Link>
         </div>
+        
         {error && (
-          <div className="bg-destructive/15 p-3 rounded-md">
-            <p className="text-sm text-destructive">{error}</p>
+          <div className="bg-red-500/10 ring-1 ring-red-500/20 p-4 rounded-xl">
+            <p className="text-sm text-red-300">{error}</p>
           </div>
         )}
+        
         {!emailVerification && (
-          <Button disabled={isPending} type="submit" className="w-full">
+          <Button 
+            disabled={isPending} 
+            type="submit" 
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5"
+          >
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Signing in...
               </>
             ) : (
-              "Sign in"
+              "Sign in to your account"
             )}
           </Button>
         )}

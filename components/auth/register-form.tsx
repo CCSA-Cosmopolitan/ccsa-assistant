@@ -61,26 +61,33 @@ export function RegisterForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {success ? (
-          <div className="p-4 bg-green-50 border border-green-100 rounded-md flex flex-col items-center text-center">
-            <div className="mb-2 bg-green-100 p-2 rounded-full">
-              <Mail className="h-6 w-6 text-green-700" />
+          <div className="p-6 bg-emerald-500/10 ring-1 ring-emerald-500/20 rounded-xl flex flex-col items-center text-center space-y-3">
+            <div className="bg-emerald-500/20 p-3 rounded-full">
+              <Mail className="h-6 w-6 text-emerald-400" />
             </div>
-            <h3 className="font-medium text-green-800">Verification Email Sent</h3>
-            <p className="text-sm text-green-700 mt-1">{success}</p>
+            <div className="space-y-1">
+              <h3 className="font-semibold text-emerald-200">Verification Email Sent</h3>
+              <p className="text-sm text-emerald-300">{success}</p>
+            </div>
           </div>
         ) : (
           <>
-            <div className="space-y-4">
+            <div className="space-y-5">
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel className="text-slate-200 font-medium">Full Name</FormLabel>
                     <FormControl>
-                      <Input {...field} className=" border-primary" disabled={isPending} placeholder="John Doe" />
+                      <Input 
+                        {...field} 
+                        className="bg-white/5 border-white/10 text-white placeholder:text-slate-400 focus:border-emerald-400 focus:ring-emerald-400/20" 
+                        disabled={isPending} 
+                        placeholder="Enter your full name" 
+                      />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
@@ -89,11 +96,17 @@ export function RegisterForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className="text-slate-200 font-medium">Email</FormLabel>
                     <FormControl>
-                      <Input {...field} className=" border-primary" disabled={isPending} placeholder="john.doe@example.com" type="email" />
+                      <Input 
+                        {...field} 
+                        className="bg-white/5 border-white/10 text-white placeholder:text-slate-400 focus:border-emerald-400 focus:ring-emerald-400/20" 
+                        disabled={isPending} 
+                        placeholder="john.doe@example.com" 
+                        type="email" 
+                      />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
@@ -102,11 +115,17 @@ export function RegisterForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel className="text-slate-200 font-medium">Password</FormLabel>
                     <FormControl>
-                      <Input {...field} className=" border-primary" disabled={isPending} placeholder="********" type="password" />
+                      <Input 
+                        {...field} 
+                        className="bg-white/5 border-white/10 text-white placeholder:text-slate-400 focus:border-emerald-400 focus:ring-emerald-400/20" 
+                        disabled={isPending} 
+                        placeholder="Create a strong password" 
+                        type="password" 
+                      />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
@@ -115,39 +134,49 @@ export function RegisterForm() {
                 name="country"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Country</FormLabel>
+                    <FormLabel className="text-slate-200 font-medium">Country</FormLabel>
                     <Select disabled={isPending} onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl className="border-primary">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select your country" />
+                      <FormControl>
+                        <SelectTrigger className="bg-white/5 border-white/10 text-white focus:border-emerald-400 focus:ring-emerald-400/20">
+                          <SelectValue placeholder="Select your country" className="text-slate-400" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="max-h-[200px]">
+                      <SelectContent className="bg-[#0A0E13] border-white/10 max-h-[200px]">
                         {countries.map((country) => (
-                          <SelectItem key={country.code} value={country.name}>
+                          <SelectItem 
+                            key={country.code} 
+                            value={country.name}
+                            className="text-slate-200 focus:bg-emerald-500/10 focus:text-emerald-200"
+                          >
                             {country.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormMessage />
+                    <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
             </div>
+            
             {error && (
-              <div className="bg-destructive/15 p-3 rounded-md">
-                <p className="text-sm text-destructive">{error}</p>
+              <div className="bg-red-500/10 ring-1 ring-red-500/20 p-4 rounded-xl">
+                <p className="text-sm text-red-300">{error}</p>
               </div>
             )}
-            <Button disabled={isPending} type="submit" className="w-full">
+            
+            <Button 
+              disabled={isPending} 
+              type="submit" 
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5"
+            >
               {isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Creating account...
                 </>
               ) : (
-                "Create account"
+                "Create your account"
               )}
             </Button>
           </>
