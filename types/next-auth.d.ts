@@ -7,6 +7,8 @@ declare module "next-auth" {
       role: "USER" | "ADMIN"
       walletBalance: number
       emailVerified?: Date | null
+      country?: string
+      preferredPaymentGateway?: string
     } & DefaultSession["user"]
   }
 

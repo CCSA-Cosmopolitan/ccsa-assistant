@@ -4,9 +4,11 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { useState } from "react"
 import { useSession, signOut } from "next-auth/react"
+import Image from "next/image"
 import { useTheme } from "next-themes"
 import { BarChart3, Home, Leaf, MessageSquare, Settings, Wallet, Beaker, Menu, X, LogOut, Sun, Moon, User } from "lucide-react"
 import { cn } from "@/lib/utils"
+import logo from '@/public/logo-image.png'
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -61,7 +63,7 @@ export function MobileNavigation() {
   return (
     <>
       {/* Mobile Bottom Navigation - AI Tools */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0A0E13] border-t border-white/10">
         <div className="grid grid-cols-5 gap-1 p-2">
           {mobileNavItems.map((item) => {
             const isActive = pathname === item.href
@@ -72,8 +74,8 @@ export function MobileNavigation() {
                 className={cn(
                   "flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-colors",
                   isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                    ? "bg-emerald-500/20 text-emerald-300"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-white/10"
                 )}
               >
                 <item.icon className="h-5 w-5 mb-1" />
@@ -85,14 +87,15 @@ export function MobileNavigation() {
       </div>
 
       {/* Mobile Top Bar - Logo & Menu */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-[#0A0E13]/95 backdrop-blur-sm border-b border-white/10">
         <div className="flex items-center justify-between p-4">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="rounded-full bg-primary/10 p-1">
-              <Leaf className="h-5 w-5 text-primary" />
+            <div className="rounded-full ">
+              {/* <Leaf className="h-5 w-5 text-emerald-400" /> */}
+              <Image src={logo} alt="CCSA Logo" className="h-10 w-10 object-contain" />
             </div>
-            <span className="text-lg font-bold">CCSA FarmAI</span>
+            <span className=" text-2xl tracking-tight -ml-6 font-thin font-mono text-white">CCSA</span>
           </div>
 
           {/* Quick Actions & Menu */}
@@ -103,8 +106,8 @@ export function MobileNavigation() {
               className={cn(
                 "flex items-center justify-center p-2 rounded-lg transition-colors",
                 pathname === "/wallet"
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                  ? "bg-emerald-500/20 text-emerald-300"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-white/10"
               )}
             >
               <Wallet className="h-5 w-5" />
@@ -113,33 +116,33 @@ export function MobileNavigation() {
             {/* Mobile Menu Sheet */}
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-200 hover:bg-white/10">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-80">
+              <SheetContent side="right" className="w-80 bg-[#0A0E13] border-white/10">
                 <SheetHeader>
-                  <SheetTitle className="text-left">Menu</SheetTitle>
+                  <SheetTitle className="text-left text-white">Menu</SheetTitle>
                 </SheetHeader>
                 
                 <div className="flex flex-col space-y-6 mt-6">
                   {/* User Profile */}
-                  <div className="flex items-center gap-3 p-4 rounded-lg bg-accent/50">
+                  <div className="flex items-center gap-3 p-4 rounded-lg bg-white/5 border border-white/10">
                     <Avatar className="h-12 w-12">
                       <AvatarImage src={session?.user?.image || ""} />
-                      <AvatarFallback className="bg-primary/10 text-primary">
+                      <AvatarFallback className="bg-emerald-500/20 text-emerald-300">
                         {session?.user?.name?.charAt(0) || "U"}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{session?.user?.name}</p>
-                      <p className="text-xs text-muted-foreground truncate">{session?.user?.email}</p>
+                      <p className="text-sm font-medium truncate text-white">{session?.user?.name}</p>
+                      <p className="text-xs text-slate-400 truncate">{session?.user?.email}</p>
                     </div>
                   </div>
 
                   {/* Menu Items */}
                   <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-muted-foreground px-2">Account</h3>
+                    <h3 className="text-sm font-medium text-slate-300 px-2">Account</h3>
                     {mobileMenuItems.map((item) => {
                       const isActive = pathname === item.href
                       return (
@@ -150,8 +153,8 @@ export function MobileNavigation() {
                           className={cn(
                             "flex items-center gap-3 p-3 rounded-lg transition-colors",
                             isActive
-                              ? "bg-primary text-primary-foreground"
-                              : "text-foreground hover:bg-accent"
+                              ? "bg-emerald-500/20 text-emerald-300"
+                              : "text-slate-200 hover:bg-white/10"
                           )}
                         >
                           <item.icon className="h-5 w-5" />
@@ -163,16 +166,17 @@ export function MobileNavigation() {
 
                   {/* Theme Switcher */}
                   <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-muted-foreground px-2">Preferences</h3>
-                    <div className="flex items-center justify-between p-3 rounded-lg hover:bg-accent">
+                    <h3 className="text-sm font-medium text-slate-300 px-2">Preferences</h3>
+                    <div className="flex items-center justify-between p-3 rounded-lg hover:bg-white/10">
                       <div className="flex items-center gap-3">
-                        {theme === "dark" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-                        <span className="font-medium">Theme</span>
+                        {theme === "dark" ? <Moon className="h-5 w-5 text-slate-200" /> : <Sun className="h-5 w-5 text-slate-200" />}
+                        <span className="font-medium text-white">Theme</span>
                       </div>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                        className="border-white/20 text-slate-200 hover:bg-white/10"
                       >
                         {theme === "dark" ? "Light" : "Dark"}
                       </Button>
@@ -180,11 +184,11 @@ export function MobileNavigation() {
                   </div>
 
                   {/* Sign Out */}
-                  <div className="pt-4 border-t border-border">
+                  <div className="pt-4 border-t border-white/10">
                     <Button
                       variant="outline"
                       onClick={() => signOut({ callbackUrl: "/" })}
-                      className="w-full justify-start gap-3 text-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+                      className="w-full justify-start gap-3 text-red-400 border-red-400/20 hover:bg-red-400/10 hover:text-red-300"
                     >
                       <LogOut className="h-5 w-5" />
                       Sign Out

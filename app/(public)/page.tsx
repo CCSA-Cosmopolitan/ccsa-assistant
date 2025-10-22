@@ -29,7 +29,7 @@ export default function Home() {
                   CCSA FarmAI
                 </h1>
                 <p className="mt-3 text-lg text-slate-300">
-                  AI built on real soil chemistry across Nigerian locations—helping you maximize yields, reduce costs, and farm sustainably with up to
+                  AI built on real soil chemistry across Nigerian locations helping you maximize yields, reduce costs, and farm sustainably with up to
                   <span className="text-emerald-400 font-semibold"> 99% accuracy</span>.
                 </p>
 

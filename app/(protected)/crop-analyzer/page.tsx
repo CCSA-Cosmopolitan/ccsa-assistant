@@ -174,7 +174,14 @@ export default function CropAnalyzerPage() {
   ]
 
   return (
-    <div className="min-h-screen w-full mx-auto max-w-4xl flex flex-col">
+    <div className=" w-full mx-auto flex flex-col bg-[#0A0E13] text-slate-200">
+      {/* Backdrop */}
+      <div className="pointer-events-none fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(60%_40%_at_50%_10%,rgba(16,185,129,0.08),transparent_60%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(40%_30%_at_80%_10%,rgba(99,102,241,0.08),transparent_60%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(40%_30%_at_20%_90%,rgba(14,165,233,0.06),transparent_60%)]"></div>
+      </div>
+      
       <AiPageHeader 
         title="Crop Analyzer"
         description="Upload images of crops or plants to get AI-powered detailed analysis using OpenAI's vision technology"
@@ -182,35 +189,52 @@ export default function CropAnalyzerPage() {
         onLanguageChange={setLanguage}
       />
       
-      <div className="flex-1 container py-6">
+      <div className="flex-1 container py-6 max-w-4xl mx-auto px-4 md:px-6">
         <div className="grid gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Upload Crop Image</CardTitle>
-            <CardDescription>Upload a clear image of your crop or plant for analysis.</CardDescription>
-          </CardHeader>
-          <form onSubmit={handleSubmit}>
-            <CardContent className="space-y-4">
-              <div className="grid w-full items-center gap-1.5">
-                <Label htmlFor="crop-image">Crop Image</Label>
-                <div
-                  className={`relative w-full h-64 rounded-lg border-2 border-dashed transition-all duration-200 cursor-pointer ${
-                    isDragging 
-                      ? "border-primary bg-primary/10 scale-[1.02]" 
-                      : previewUrl 
-                        ? "border-border bg-background" 
-                        : "border-muted-foreground/25 hover:border-primary/50 hover:bg-accent/50"
-                  }`}
-                  onDrop={handleDrop}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onClick={() => !previewUrl && document.getElementById("crop-image")?.click()}
-                >
+            {analysis && (
+          <div className="rounded-2xl ring-1 ring-white/15 bg-gradient-to-b from-white/10 to-transparent p-2">
+            <div className="rounded-xl bg-[#0B1117] ring-1 ring-white/10 p-4 md:p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="h-6 w-1 bg-emerald-400 rounded-full"></div>
+                <h3 className="text-lg md:text-xl font-semibold text-white">Crop Analysis Results</h3>
+              </div>
+              <p className="text-slate-400 mb-4">Based on the image provided, here's our analysis of your crop.</p>
+              <div className="prose max-w-none dark:prose-invert">
+                <Markdown content={analysis} animationSpeed={5} revealImmediately={false} />
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="rounded-2xl ring-1 ring-white/15 bg-gradient-to-b from-white/10 to-transparent p-2">
+          <div className="rounded-xl bg-[#0B1117] ring-1 ring-white/10 p-4 md:p-6">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="h-6 w-1 bg-emerald-400 rounded-full"></div>
+              <h3 className="text-lg md:text-xl font-semibold text-white">Upload Crop Image</h3>
+            </div>
+            <p className="text-slate-400 mb-6">Upload a clear image of your crop or plant for analysis.</p>
+
+            <form onSubmit={handleSubmit}>
+              <div className="space-y-6">
+                <div className="grid w-full items-center gap-1.5">
+                  <Label htmlFor="crop-image" className="text-slate-200">Crop Image</Label>
+                  <div
+                    className={`relative w-full h-64 rounded-lg border-2 border-dashed transition-all duration-200 cursor-pointer ${
+                      isDragging 
+                        ? "border-emerald-400 bg-emerald-400/10 scale-[1.02]" 
+                        : previewUrl 
+                          ? "border-white/20 bg-[#0A0E13]" 
+                          : "border-white/25 hover:border-emerald-400/50 hover:bg-white/5"
+                    }`}
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onClick={() => !previewUrl && document.getElementById("crop-image")?.click()}
+                  >
                   {previewUrl ? (
                     <div className="relative h-full w-full group">
                       {isImageLoading ? (
                         <div className="flex items-center justify-center h-full">
-                          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                          <Loader2 className="h-8 w-8 animate-spin text-emerald-400" />
                         </div>
                       ) : (
                         <>
@@ -230,6 +254,7 @@ export default function CropAnalyzerPage() {
                                   e.stopPropagation()
                                   document.getElementById("crop-image")?.click()
                                 }}
+                                className="bg-white/20 hover:bg-white/30 text-white border-white/20"
                               >
                                 <Upload className="h-4 w-4 mr-2" />
                                 Change
@@ -258,16 +283,16 @@ export default function CropAnalyzerPage() {
                     </div>
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full text-center p-6">
-                      <div className={`p-4 rounded-full mb-4 transition-colors ${isDragging ? "bg-primary text-primary-foreground" : "bg-accent"}`}>
+                      <div className={`p-4 rounded-full mb-4 transition-colors ${isDragging ? "bg-emerald-400 text-white" : "bg-white/10 text-emerald-400"}`}>
                         <Camera className="h-8 w-8" />
                       </div>
-                      <h3 className="text-lg font-semibold mb-2">
+                      <h3 className="text-lg font-semibold mb-2 text-white">
                         {isDragging ? "Drop your image here" : "Upload crop image"}
                       </h3>
-                      <p className="text-sm text-muted-foreground mb-4">
+                      <p className="text-sm text-slate-400 mb-4">
                         Drag and drop your image here, or click to browse
                       </p>
-                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-4 text-xs text-slate-500">
                         <span>Supports: JPG, PNG, WEBP</span>
                         <span>•</span>
                         <span>Max 5MB</span>
@@ -285,50 +310,46 @@ export default function CropAnalyzerPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="analysis-type">Analysis Type</Label>
+                <Label htmlFor="analysis-type" className="text-slate-200">Analysis Type</Label>
                 <Select value={analysisType} onValueChange={(value) => setAnalysisType(value as AnalysisType)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-[#0A0E13] border-white/20 text-white focus:border-emerald-400">
                     <SelectValue placeholder="Select analysis type" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-[#0B1117] border-white/20">
                     {analysisTypeOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
+                      <SelectItem key={option.value} value={option.value} className="text-white hover:bg-white/10">
                         {option.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-slate-400">
                   Select the type of analysis you want to perform on your crop image.
                 </p>
               </div>
-            </CardContent>
-            <CardFooter>
-              <Button type="submit" disabled={isLoading || !selectedImage}>
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Analyzing...
-                  </>
-                ) : (
-                  "Analyze Crop"
-                )}
-              </Button>
-            </CardFooter>
-          </form>
-        </Card>
 
-        {analysis && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Crop Analysis Results</CardTitle>
-              <CardDescription>Based on the image provided, here's our analysis of your crop.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Markdown content={analysis} />
-            </CardContent>
-          </Card>
-        )}
+              <div className="flex justify-end pt-4">
+                <Button
+                  type="submit"
+                  disabled={isLoading || !selectedImage}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white px-8"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Analyzing...
+                    </>
+                  ) : (
+                    "Analyze Crop"
+                  )}
+                </Button>
+              </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      
         </div>
       </div>
     </div>

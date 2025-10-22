@@ -3,6 +3,7 @@ import React from 'react'
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Leaf, Menu } from "lucide-react"
+import logo from '@/public/logo-image.png'
 import { useSession } from 'next-auth/react'
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 import { useState } from "react"
@@ -17,9 +18,16 @@ const PublicNavigation = () => {
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link href="/" className="group inline-flex items-center gap-3">
-            <div className="grid h-9 w-9 place-items-center rounded-md ring-1 ring-white/10 bg-white/5 group-hover:bg-white/10 transition-colors">
+          <img 
+            src={logo.src}
+            alt="Logo"
+            width={36}
+            height={36}
+            className="h-9 w-9"
+          />
+            {/* <div className="grid h-9 w-9 place-items-center rounded-md ring-1 ring-white/10 bg-white/5 group-hover:bg-white/10 transition-colors">
               <Leaf className="h-5 w-5 text-emerald-400" />
-            </div>
+            </div> */}
             <div className="flex flex-col leading-tight">
               <span className="text-[13px] uppercase tracking-[0.18em] text-slate-400">Center for</span>
               <span className="text-[15px] tracking-tight font-semibold text-white">Climate‑Smart Agriculture</span>

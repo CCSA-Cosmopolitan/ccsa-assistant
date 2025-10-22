@@ -23,13 +23,13 @@ export function AiPageHeader({
       <div className="px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-foreground">{title}</h1>
-            <p className="text-sm text-muted-foreground mt-1">{description}</p>
+            <h1 className="text-2xl hidden md:block font-bold text-foreground">{title}</h1>
+            <p className="text-sm hidden md:block text-muted-foreground mt-1">{description}</p>
           </div>
           
           {showLanguageSelector && onLanguageChange && (
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">Language:</span>
+              <span className="text-sm hidden md:block text-muted-foreground">Language:</span>
               <Select value={language} onValueChange={onLanguageChange}>
                 <SelectTrigger className="w-40 bg-background/50 border-border/60">
                   <SelectValue />

@@ -20,13 +20,8 @@ const nextConfig = {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
-    serverComponentsExternalPackages: ["bcryptjs"],
   },
-  // Disable Edge runtime for middleware to avoid oidc-token-hash issues
-  middleware: {
-    // Use Node.js runtime instead of Edge
-    runtime: "nodejs"
-  }
+  serverExternalPackages: ["bcryptjs"],
 }
 
 mergeConfig(nextConfig, userConfig)
