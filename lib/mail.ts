@@ -58,3 +58,65 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
     `,
   })
 }
+
+export const sendContactFormEmail = async (data: {
+  name: string
+  email: string
+  subject: string
+  message: string
+}) => {
+  const { name, email, subject, message } = data
+
+  await transporter.sendMail({
+    from: `"CCSA FarmAI Contact Form" <${process.env.GOOGLE_EMAIL}>`,
+    to: process.env.GOOGLE_EMAIL, // Send to support team
+    subject: `Contact Form: ${subject}`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+        <h1 style="color: #16A34A; text-align: center;">CCSA FarmAI</h1>
+        <h2>New Contact Form Submission</h2>
+        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Subject:</strong> ${subject}</p>
+        </div>
+        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3>Message:</h3>
+          <p style="white-space: pre-wrap;">${message}</p>
+        </div>
+        <p>This message was sent from the CCSA FarmAI contact form.</p>
+      </div>
+    `,
+  })
+}
+
+export const sendContactConfirmationEmail = async (data: {
+  name: string
+  email: string
+}) => {
+  const { name, email } = data
+
+  await transporter.sendMail({
+    from: `"CCSA FarmAI" <${process.env.GOOGLE_EMAIL}>`,
+    to: email,
+    subject: "Thank you for contacting CCSA FarmAI",
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+        <h1 style="color: #16A34A; text-align: center;">CCSA FarmAI</h1>
+        <h2>Thank you for contacting us!</h2>
+        <p>Dear ${name},</p>
+        <p>Thank you for reaching out to CCSA FarmAI. We have received your message and our team will get back to you within 24 hours.</p>
+        <p>In the meantime, feel free to explore our platform:</p>
+        <div style="text-align: center; margin: 24px 0;">
+          <a href="${domain}" style="background-color: #16A34A; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; margin: 0 10px;">
+            Visit CCSA FarmAI
+          </a>
+          <a href="${domain}/features" style="background-color: #6B7280; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; margin: 0 10px;">
+            View Features
+          </a>
+        </div>
+        <p>Best regards,<br>The CCSA FarmAI Team</p>
+      </div>
+    `,
+  })
+}

@@ -1,244 +1,189 @@
-"use client"
-
-import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Check, Leaf } from "lucide-react"
-import { useSession } from "next-auth/react"
-import { getCountryByName, getCurrencySymbol } from "@/lib/countries"
-import { getUserCountry } from "@/actions/location"
+import { Check, Leaf, Sparkles, Star } from "lucide-react"
 
-interface PricingPlan {
-  name: string
-  description: string
-  price: number
-  features: string[]
-  popular?: boolean
-}
+const pricingPlans = [
+  {
+    name: "Free",
+    description: "Perfect for trying out CCSA FarmAI",
+    price: "₦0",
+    period: "forever",
+    features: [
+      "3 AI consultations per month",
+      "Basic crop recommendations",
+      "Community support",
+      "Mobile app access",
+      "Basic weather insights"
+    ],
+    cta: "Get Started",
+    href: "/register",
+    popular: false
+  },
+  {
+    name: "Standard",
+    description: "Ideal for small to medium farms",
+    price: "₦5,000",
+    period: "per month",
+    features: [
+      "Unlimited AI consultations",
+      "Advanced crop & soil analysis",
+      "Real-time weather alerts",
+      "Pest & disease detection",
+      "Yield optimization reports",
+      "Email support",
+      "Farm management tools"
+    ],
+    cta: "Start Trial",
+    href: "/register",
+    popular: true
+  },
+  {
+    name: "Premium",
+    description: "For large farms and commercial operations",
+    price: "₦12,000",
+    period: "per month",
+    features: [
+      "Everything in Standard",
+      "Priority AI processing",
+      "Custom farm insights",
+      "Satellite imagery analysis",
+      "Expert consultation calls",
+      "24/7 priority support",
+      "API access",
+      "Multi-farm management"
+    ],
+    cta: "Contact Sales",
+    href: "/register",
+    popular: false
+  }
+]
 
 export default function PricingPage() {
-  const { data: session } = useSession()
-  const [currency, setCurrency] = useState("NGN")
-  const [currencySymbol, setCurrencySymbol] = useState("₦")
-  const [plans, setPlans] = useState<PricingPlan[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchUserCountry = async () => {
-      try {
-        // If user is logged in, use their stored country
-        if (session?.user?.country) {
-          const country = getCountryByName(session.user.country)
-          setCurrency(country.currency)
-          setCurrencySymbol(getCurrencySymbol(country.currency))
-          generatePlans(country.currency)
-          setIsLoading(false)
-          return
-        }
-
-        // Otherwise, try to detect country by IP
-        const result = await getUserCountry()
-
-        if (result.country) {
-          const country = getCountryByName(result.country)
-          setCurrency(country.currency)
-          setCurrencySymbol(getCurrencySymbol(country.currency))
-          generatePlans(country.currency)
-        } else {
-          // Default to NGN if detection fails
-          setCurrency("NGN")
-          setCurrencySymbol("₦")
-          generatePlans("NGN")
-        }
-      } catch (error) {
-        console.error("Error fetching user country:", error)
-        // Default to NGN if detection fails
-        setCurrency("NGN")
-        setCurrencySymbol("₦")
-        generatePlans("NGN")
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchUserCountry()
-  }, [session])
-
-  const generatePlans = (currency: string) => {
-    // Exchange rates (simplified)
-    const rates: Record<string, number> = {
-      NGN: 1,
-      USD: 0.00067, // 1 NGN = 0.00067 USD
-      GBP: 0.00053, // 1 NGN = 0.00053 GBP
-      EUR: 0.00062, // 1 NGN = 0.00062 EUR
-      // Add more currencies as needed
-    }
-
-    const rate = rates[currency] || rates.USD
-
-    // Base prices in NGN
-    const basePlans: PricingPlan[] = [
-      {
-        name: "Free",
-        description: "Basic access to AI features",
-        price: 0,
-        features: ["3 AI prompts per month", "Basic farm analysis", "Community support"],
-      },
-      {
-        name: "Standard",
-        description: "For serious farmers",
-        price: 5000,
-        features: ["Unlimited AI prompts", "Advanced farm analysis", "Crop and soil analysis", "Email support"],
-        popular: true,
-      },
-      {
-        name: "Premium",
-        description: "For professional farmers",
-        price: 12000,
-        features: [
-          "Everything in Standard",
-          "Priority processing",
-          "Personalized recommendations",
-          "24/7 priority support",
-        ],
-      },
-    ]
-
-    // Convert prices to selected currency
-    const convertedPlans = basePlans.map((plan) => ({
-      ...plan,
-      price: plan.price === 0 ? 0 : Math.round(plan.price * rate),
-    }))
-
-    setPlans(convertedPlans)
-  }
-
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40">
-        <div className="container flex h-16 items-center justify-between py-4">
-          <div className="flex items-center gap-2">
-            <Leaf className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">CCSA FarmAI</span>
-          </div>
-          <nav className="hidden md:flex items-center gap-6">
-            <Link
-              href="/"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              Home
-            </Link>
-            <Link
-              href="/about"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              About Us
-            </Link>
-            <Link href="/pricing" className="text-sm font-medium text-foreground hover:underline underline-offset-4">
-              Pricing
-            </Link>
-            <Link
-              href="/contact"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground hover:underline underline-offset-4"
-            >
-              Contact
-            </Link>
-          </nav>
-          <div className="flex items-center gap-4">
-            <Link href="/login">
-              <Button variant="outline">Log In</Button>
-            </Link>
-            <Link href="/register">
-              <Button>Sign Up</Button>
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      <main className="flex-1">
-        <section className="py-16 md:py-24">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <div className="inline-block rounded-lg bg-primary px-3 py-1 text-sm text-primary-foreground">
-                  Pricing
-                </div>
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                  Simple, Transparent Pricing
-                </h1>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Start with our free tier and upgrade as your needs grow
-                </p>
-              </div>
-
-              {!isLoading && <div className="text-sm text-muted-foreground">Prices shown in {currency}</div>}
+    <div className="flex-1 pt-20">
+      {/* Hero Section */}
+      <section className="relative">
+        <div className="mx-auto max-w-7xl px-6 pt-16 pb-20">
+          <div className="text-center space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-slate-300">
+              <Star className="h-3 w-3 text-emerald-400" />
+              Simple, transparent pricing
             </div>
-
-            {isLoading ? (
-              <div className="flex justify-center items-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-              </div>
-            ) : (
-              <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3 mt-12">
-                {plans.map((plan) => (
-                  <Card
-                    key={plan.name}
-                    className={`flex flex-col ${
-                      plan.popular
-                        ? "border-primary/30 bg-primary/5 shadow-md relative overflow-hidden"
-                        : "border-border/40 shadow-sm transition-all hover:shadow-md"
-                    }`}
-                  >
-                    {plan.popular && (
-                      <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-medium">
-                        Popular
-                      </div>
-                    )}
-                    <CardHeader>
-                      <CardTitle>{plan.name}</CardTitle>
-                      <CardDescription>{plan.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-1">
-                      <div className="mb-4">
-                        <span className="text-4xl font-bold">
-                          {plan.price === 0 ? "Free" : `${currencySymbol}${plan.price.toLocaleString()}`}
-                        </span>
-                        {plan.price > 0 && <span className="text-sm text-muted-foreground">/month</span>}
-                      </div>
-                      <ul className="space-y-2 text-sm">
-                        {plan.features.map((feature, index) => (
-                          <li key={index} className="flex items-center">
-                            <Check className="mr-2 h-4 w-4 text-primary" />
-                            <span>{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                    <CardFooter>
-                      <Link href={session ? "/wallet" : "/register"} className="w-full">
-                        <Button className="w-full">{plan.price === 0 ? "Get Started" : "Subscribe"}</Button>
-                      </Link>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-      </main>
-
-      <footer className="border-t border-border/40 bg-secondary/30">
-        <div className="container flex flex-col gap-6 py-8 md:flex-row md:items-center md:justify-between md:py-12">
-          <div className="flex items-center gap-2">
-            <Leaf className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">CCSA FarmAI</span>
-          </div>
-          <div className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} CCSA FarmAI. All rights reserved.
+            
+            <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+              Choose the right plan for
+              <span className="text-emerald-400"> your farm</span>
+            </h1>
+            
+            <p className="text-xl text-slate-300 max-w-3xl mx-auto">
+              Start with our free tier and scale as your farming operation grows. 
+              All plans include our core AI-powered agricultural insights.
+            </p>
           </div>
         </div>
-      </footer>
+      </section>
+
+      {/* Pricing Cards */}
+      <section className="relative pb-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {pricingPlans.map((plan, index) => (
+              <div
+                key={plan.name}
+                className={`relative rounded-2xl p-8 ring-1 transition-all hover:ring-white/20 ${
+                  plan.popular
+                    ? "bg-white/10 ring-emerald-400/30 scale-105"
+                    : "bg-white/5 ring-white/10"
+                }`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <div className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-3 py-1 text-xs font-medium text-white">
+                      <Sparkles className="h-3 w-3" />
+                      Most Popular
+                    </div>
+                  </div>
+                )}
+                
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-semibold text-white">{plan.name}</h3>
+                    <p className="text-slate-400 mt-1">{plan.description}</p>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-bold text-white">{plan.price}</span>
+                      <span className="text-slate-400">/{plan.period}</span>
+                    </div>
+                  </div>
+                  
+                  <ul className="space-y-3">
+                    {plan.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="flex items-start gap-3">
+                        <Check className="h-4 w-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                        <span className="text-slate-300 text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <div className="pt-6">
+                    <Link href={plan.href}>
+                      <Button 
+                        className={`w-full ${
+                          plan.popular
+                            ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+                            : "bg-white/10 hover:bg-white/15 text-white ring-1 ring-white/20"
+                        }`}
+                      >
+                        {plan.cta}
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Additional Info */}
+          <div className="mt-16 text-center">
+            <p className="text-slate-400 text-sm">
+              All plans include a 14-day free trial. No credit card required. Cancel anytime.
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-8 text-sm text-slate-400">
+              <span>✓ Money-back guarantee</span>
+              <span>✓ Local Nigerian support</span>
+              <span>✓ Mobile & web access</span>
+              <span>✓ Regular feature updates</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="relative py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="rounded-2xl bg-gradient-to-b from-white/10 to-transparent ring-1 ring-white/15 p-2">
+            <div className="rounded-xl bg-[#0B1117] ring-1 ring-white/10 p-8 text-center">
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                Need a custom solution?
+              </h3>
+              <p className="text-slate-300 mb-8 max-w-2xl mx-auto">
+                We offer enterprise solutions for large agricultural operations, cooperatives, 
+                and government programs. Contact us to discuss your specific needs.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3">
+                  Contact Sales
+                </Button>
+                <Button variant="outline" className="border-white/20 text-slate-200 hover:bg-white/5 px-8 py-3">
+                  Schedule Demo
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }

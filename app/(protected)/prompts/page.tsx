@@ -43,8 +43,12 @@ export default function PromptsPage() {
         }
 
         if (result.prompts) {
-          setPrompts(result.prompts)
-          setFilteredPrompts(result.prompts)
+          const formattedPrompts = result.prompts.map(prompt => ({
+            ...prompt,
+            createdAt: prompt.createdAt.toString()
+          }));
+          setPrompts(formattedPrompts)
+          setFilteredPrompts(formattedPrompts)
         }
       } catch (error) {
         toast({

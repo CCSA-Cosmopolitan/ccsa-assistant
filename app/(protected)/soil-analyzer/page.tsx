@@ -71,7 +71,14 @@ export default function SoilAnalyzerPage() {
   }
 
   return (
-    <div className="min-h-screen w-full mx-auto max-w-4xl flex flex-col">
+    <div className="min-h-screen w-full mx-auto flex flex-col bg-[#0A0E13] text-slate-200">
+      {/* Backdrop */}
+      <div className="pointer-events-none fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(60%_40%_at_50%_10%,rgba(16,185,129,0.08),transparent_60%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(40%_30%_at_80%_10%,rgba(99,102,241,0.08),transparent_60%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(40%_30%_at_20%_90%,rgba(14,165,233,0.06),transparent_60%)]"></div>
+      </div>
+      
       <AiPageHeader 
         title="Soil Analyzer"
         description="Analyze your soil conditions to get personalized recommendations"
@@ -79,36 +86,38 @@ export default function SoilAnalyzerPage() {
         onLanguageChange={setLanguage}
       />
       
-      <div className="flex-1 container py-6">
+      <div className="flex-1 container py-6 max-w-4xl mx-auto px-4 md:px-6">
         <div className="grid gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Soil Details</CardTitle>
-            <CardDescription>Enter information about your soil to receive a detailed analysis.</CardDescription>
-          </CardHeader>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <CardContent className="space-y-4">
+        <div className="rounded-2xl ring-1 ring-white/15 bg-gradient-to-b from-white/10 to-transparent p-2">
+          <div className="rounded-xl bg-[#0B1117] ring-1 ring-white/10 p-4 md:p-6">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="h-6 w-1 bg-emerald-400 rounded-full"></div>
+              <h3 className="text-lg md:text-xl font-semibold text-white">Soil Details</h3>
+            </div>
+            <p className="text-slate-400 mb-6">Enter information about your soil to receive a detailed analysis.</p>
+
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <FormField
                     control={form.control}
                     name="soilType"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Soil Type</FormLabel>
+                        <FormLabel className="text-slate-200">Soil Type</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-[#0A0E13] border-white/20 text-white focus:border-emerald-400">
                               <SelectValue placeholder="Select soil type" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
-                            <SelectItem value="clay">Clay</SelectItem>
-                            <SelectItem value="sandy">Sandy</SelectItem>
-                            <SelectItem value="loamy">Loamy</SelectItem>
-                            <SelectItem value="silty">Silty</SelectItem>
-                            <SelectItem value="peaty">Peaty</SelectItem>
-                            <SelectItem value="chalky">Chalky</SelectItem>
+                          <SelectContent className="bg-[#0B1117] border-white/20">
+                            <SelectItem value="clay" className="text-white hover:bg-white/10">Clay</SelectItem>
+                            <SelectItem value="sandy" className="text-white hover:bg-white/10">Sandy</SelectItem>
+                            <SelectItem value="loamy" className="text-white hover:bg-white/10">Loamy</SelectItem>
+                            <SelectItem value="silty" className="text-white hover:bg-white/10">Silty</SelectItem>
+                            <SelectItem value="peaty" className="text-white hover:bg-white/10">Peaty</SelectItem>
+                            <SelectItem value="chalky" className="text-white hover:bg-white/10">Chalky</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -120,9 +129,13 @@ export default function SoilAnalyzerPage() {
                     name="ph"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>pH Level</FormLabel>
+                        <FormLabel className="text-slate-200">pH Level</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., 6.5" {...field} />
+                          <Input
+                            placeholder="e.g., 6.5"
+                            className="bg-[#0A0E13] border-white/20 text-white placeholder:text-slate-500 focus:border-emerald-400"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -133,9 +146,13 @@ export default function SoilAnalyzerPage() {
                     name="organicMatter"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Organic Matter (%)</FormLabel>
+                        <FormLabel className="text-slate-200">Organic Matter (%)</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., 3.5" {...field} />
+                          <Input
+                            placeholder="e.g., 3.5"
+                            className="bg-[#0A0E13] border-white/20 text-white placeholder:text-slate-500 focus:border-emerald-400"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -146,9 +163,13 @@ export default function SoilAnalyzerPage() {
                     name="nitrogen"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Nitrogen Content (mg/kg)</FormLabel>
+                        <FormLabel className="text-slate-200">Nitrogen Content (mg/kg)</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., 150" {...field} />
+                          <Input
+                            placeholder="e.g., 150"
+                            className="bg-[#0A0E13] border-white/20 text-white placeholder:text-slate-500 focus:border-emerald-400"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -159,9 +180,13 @@ export default function SoilAnalyzerPage() {
                     name="phosphorus"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Phosphorus Content (mg/kg)</FormLabel>
+                        <FormLabel className="text-slate-200">Phosphorus Content (mg/kg)</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., 25" {...field} />
+                          <Input
+                            placeholder="e.g., 25"
+                            className="bg-[#0A0E13] border-white/20 text-white placeholder:text-slate-500 focus:border-emerald-400"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -172,9 +197,13 @@ export default function SoilAnalyzerPage() {
                     name="potassium"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Potassium Content (mg/kg)</FormLabel>
+                        <FormLabel className="text-slate-200">Potassium Content (mg/kg)</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., 200" {...field} />
+                          <Input
+                            placeholder="e.g., 200"
+                            className="bg-[#0A0E13] border-white/20 text-white placeholder:text-slate-500 focus:border-emerald-400"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -185,9 +214,13 @@ export default function SoilAnalyzerPage() {
                     name="location"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Location</FormLabel>
+                        <FormLabel className="text-slate-200">Location</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., Ibadan, Oyo State" {...field} />
+                          <Input
+                            placeholder="e.g., Ibadan, Oyo State"
+                            className="bg-[#0A0E13] border-white/20 text-white placeholder:text-slate-500 focus:border-emerald-400"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -199,11 +232,11 @@ export default function SoilAnalyzerPage() {
                   name="additionalInfo"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Additional Information (Optional)</FormLabel>
+                      <FormLabel className="text-slate-200">Additional Information (Optional)</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Any other details about your soil that might be relevant..."
-                          className="min-h-[100px]"
+                          className="min-h-[100px] bg-[#0A0E13] border-white/20 text-white placeholder:text-slate-500 focus:border-emerald-400"
                           {...field}
                         />
                       </FormControl>
@@ -211,22 +244,27 @@ export default function SoilAnalyzerPage() {
                     </FormItem>
                   )}
                 />
-              </CardContent>
-              <CardFooter>
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Analyzing...
-                    </>
-                  ) : (
-                    "Analyze Soil"
-                  )}
-                </Button>
-              </CardFooter>
-            </form>
-          </Form>
-        </Card>
+
+                <div className="flex justify-end pt-4">
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white px-8"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Analyzing...
+                      </>
+                    ) : (
+                      "Analyze Soil"
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </div>
+        </div>
 
         {analysis && (
           <Card>

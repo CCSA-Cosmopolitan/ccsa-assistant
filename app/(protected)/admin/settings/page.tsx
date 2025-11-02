@@ -59,7 +59,7 @@ const generalSettingsSchema = z.object({
   contactEmail: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  maintenanceMode: z.boolean().default(false),
+  maintenanceMode: z.boolean(),
 })
 
 export default function AdminSettingsPage() {
@@ -82,9 +82,9 @@ export default function AdminSettingsPage() {
     defaultValues: {
       openaiApiKey: process.env.OPENAI_API_KEY || "",
       resendApiKey: process.env.RESEND_API_KEY || "",
-      awsAccessKey: process.env.AWS_ACCESS_KEY || "",
-      awsSecretKey: process.env.AWS_SECRET_KEY || "",
-      awsBucketName: process.env.AWS_BUCKET_NAME || "",
+      awsAccessKey: process.env.HOST_ACCESS_KEY || "",
+      awsSecretKey: process.env.HOST_SECRET_KEY || "",
+      awsBucketName: process.env.HOST_BUCKET_NAME || "",
     },
   })
 

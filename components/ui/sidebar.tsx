@@ -1,7 +1,5 @@
 "use client"
 
-import { SidebarGroupAction } from "@/components/ui/sidebar"
-
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { type VariantProps, cva } from "class-variance-authority"
@@ -27,9 +25,23 @@ const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 const SidebarContext = React.createContext<{
   expanded: boolean
   setExpanded: React.Dispatch<React.SetStateAction<boolean>>
+  open: boolean
+  setOpen: (value: boolean | ((value: boolean) => boolean)) => void
+  openMobile: boolean
+  setOpenMobile: React.Dispatch<React.SetStateAction<boolean>>
+  isMobile: boolean
+  toggleSidebar: () => void
+  state: "expanded" | "collapsed"
 }>({
   expanded: true,
   setExpanded: () => {},
+  open: true,
+  setOpen: () => {},
+  openMobile: false,
+  setOpenMobile: () => {},
+  isMobile: false,
+  toggleSidebar: () => {},
+  state: "expanded",
 })
 
 function useSidebar() {
@@ -107,7 +119,7 @@ const SidebarProvider = React.forwardRef<
 
     // We add a state so that we can do data-state="expanded" or "collapsed".
     // This makes it easier to style the sidebar with Tailwind classes.
-    const state = open ? "expanded" : "collapsed"
+    const state: "expanded" | "collapsed" = open ? "expanded" : "collapsed"
 
     const [expanded, setExpanded] = React.useState(defaultExpanded)
 
@@ -115,8 +127,15 @@ const SidebarProvider = React.forwardRef<
       () => ({
         expanded,
         setExpanded,
+        open,
+        setOpen,
+        openMobile,
+        setOpenMobile,
+        isMobile,
+        toggleSidebar,
+        state,
       }),
-      [expanded, setExpanded],
+      [expanded, setExpanded, open, setOpen, openMobile, setOpenMobile, isMobile, toggleSidebar, state],
     )
 
     return (
@@ -374,21 +393,29 @@ const SidebarGroupContent = React.forwardRef<
 ))
 SidebarGroupContent.displayName = "SidebarGroupContent"
 
-const SidebarMenu = React.forwardRef<HTMLUListElement, React.ComponentProps<"ul"> & { children: React.ReactNode }>(
-  ({ className, children, ...props }, ref) => (
-    <div ref={ref} data-sidebar="menu" className={cn("space-y-1", className)} {...props}>
-      {children}
-    </div>
-  ),
+const SidebarMenu = React.forwardRef<HTMLDivElement, React.ComponentProps<"ul"> & { children: React.ReactNode }>(
+  ({ className, children, ...props }, ref) => {
+    // Filter out ul-specific props that don't apply to div
+    const { type, compact, ...divProps } = props as any
+    return (
+      <div ref={ref} data-sidebar="menu" className={cn("space-y-1", className)} {...divProps}>
+        {children}
+      </div>
+    )
+  },
 )
 SidebarMenu.displayName = "SidebarMenu"
 
-const SidebarMenuItem = React.forwardRef<HTMLLIElement, React.ComponentProps<"li"> & { children: React.ReactNode }>(
-  ({ className, children, ...props }, ref) => (
-    <div ref={ref} data-sidebar="menu-item" className={cn("group/menu-item relative", className)} {...props}>
-      {children}
-    </div>
-  ),
+const SidebarMenuItem = React.forwardRef<HTMLDivElement, React.ComponentProps<"li"> & { children: React.ReactNode }>(
+  ({ className, children, ...props }, ref) => {
+    // Filter out li-specific props that don't apply to div
+    const { value, type, ...divProps } = props as any
+    return (
+      <div ref={ref} data-sidebar="menu-item" className={cn("group/menu-item relative", className)} {...divProps}>
+        {children}
+      </div>
+    )
+  },
 )
 SidebarMenuItem.displayName = "SidebarMenuItem"
 
@@ -623,7 +650,6 @@ export {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,

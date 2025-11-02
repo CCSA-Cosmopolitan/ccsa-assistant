@@ -313,18 +313,25 @@ export default function FarmersAssistantPage() {
   }
 
   return (
-    <div className="flex h-screen w-full">
+    <div className="flex h-screen w-full bg-[#0A0E13] text-slate-200">
+      {/* Backdrop */}
+      <div className="pointer-events-none fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(60%_40%_at_50%_10%,rgba(16,185,129,0.08),transparent_60%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(40%_30%_at_80%_10%,rgba(99,102,241,0.08),transparent_60%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(40%_30%_at_20%_90%,rgba(14,165,233,0.06),transparent_60%)]"></div>
+      </div>
+
       {/* Chat History Sidebar */}
-      <div className={`${showHistory ? 'w-80' : 'w-0'} transition-all duration-300 overflow-hidden border-r border-border/40 bg-background/50`}>
+      <div className={`${showHistory ? 'w-80' : 'w-0'} transition-all duration-300 overflow-hidden border-r border-white/10 bg-[#0B1117]/80 backdrop-blur-sm`}>
         <div className="h-full flex flex-col">
-          <div className="p-4 border-b border-border/40">
+          <div className="p-4 border-b border-white/10">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-sm">Chat History</h3>
+              <h3 className="font-semibold text-sm text-white">Chat History</h3>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={createNewChat}
-                className="h-8 px-2"
+                className="h-8 px-2 text-slate-200 hover:bg-white/10"
               >
                 <Plus className="h-4 w-4" />
                 New
@@ -337,8 +344,8 @@ export default function FarmersAssistantPage() {
               {chatHistory.map((chat) => (
                 <div
                   key={chat.id}
-                  className={`group relative rounded-lg p-3 cursor-pointer transition-colors hover:bg-accent/50 ${
-                    currentChatId === chat.id ? 'bg-accent' : ''
+                  className={`group relative rounded-lg p-3 cursor-pointer transition-colors hover:bg-white/10 ${
+                    currentChatId === chat.id ? 'bg-emerald-500/20' : ''
                   }`}
                   onClick={() => loadChat(chat)}
                 >
@@ -368,7 +375,7 @@ export default function FarmersAssistantPage() {
               ))}
               
               {chatHistory.length === 0 && (
-                <div className="text-center py-8 text-sm text-muted-foreground">
+                <div className="text-center py-8 text-sm text-slate-400">
                   No chat history yet
                 </div>
               )}
@@ -380,27 +387,34 @@ export default function FarmersAssistantPage() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
         <AiPageHeader 
-          title="Farmers Assistant"
-          description="Chat with our AI assistant in your preferred Nigerian language"
+          title=""
+          description=""
           language={language}
           onLanguageChange={setLanguage}
         />
 
+        {/* <AiPageHeader 
+          title="Farmers Assistant"
+          description="Chat with our AI assistant in your preferred Nigerian language"
+          language={language}
+          onLanguageChange={setLanguage}
+        /> */}
+
         {/* Additional header info */}
-        <div className="px-6 py-2 border-b border-border/20 bg-muted/30">
+        <div className="px-6 py-2 border-b border-white/10 bg-[#0B1117]/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowHistory(!showHistory)}
-                className="h-6 px-2 text-xs"
+                className="h-6 px-2 text-xs text-slate-200 hover:bg-white/10"
               >
                 <History className="h-3 w-3 mr-1" />
                 History
               </Button>
               {messages.length > 0 && (
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-slate-400">
                   {Math.ceil(messages.length / 2)} exchanges
                 </span>
               )}
@@ -412,7 +426,7 @@ export default function FarmersAssistantPage() {
                 size="sm" 
                 onClick={createNewChat} 
                 title="Start new chat"
-                className="h-6 px-2 text-xs"
+                className="h-6 px-2 text-xs text-slate-200 hover:bg-white/10"
               >
                 <Plus className="h-3 w-3 mr-1" />
                 New Chat
@@ -423,7 +437,7 @@ export default function FarmersAssistantPage() {
                   size="sm" 
                   onClick={handleReset} 
                   title="Reset current chat"
-                  className="h-6 px-2 text-xs"
+                  className="h-6 px-2 text-xs text-slate-200 hover:bg-white/10"
                 >
                   <RefreshCw className="h-3 w-3 mr-1" />
                   Reset
@@ -441,10 +455,10 @@ export default function FarmersAssistantPage() {
               <div className="flex h-full items-center justify-center px-4 py-12">
                 <div className="text-center space-y-6">
                   <div className="space-y-2">
-                    <h2 className="text-2xl font-semibold text-foreground">
+                    <h2 className="text-2xl font-semibold text-white">
                       Welcome to Farmers Assistant
                     </h2>
-                    <p className="text-muted-foreground">
+                    <p className="text-slate-400">
                       Ask me anything about farming in Nigeria
                     </p>
                   </div>
@@ -460,7 +474,7 @@ export default function FarmersAssistantPage() {
                       <Button
                         key={index}
                         variant="outline"
-                        className="text-left h-auto p-3 whitespace-normal"
+                        className="text-left h-auto p-3 whitespace-normal border-white/20 text-slate-200 hover:bg-white/10"
                         onClick={() => handleSuggestionClick(question)}
                       >
                         <MessageSquare className="h-4 w-4 mr-2 flex-shrink-0" />
@@ -487,8 +501,8 @@ export default function FarmersAssistantPage() {
                         <div
                           className={`rounded-2xl px-4 py-3 ${
                             message.role === "user" 
-                              ? "bg-primary text-primary-foreground ml-12" 
-                              : "bg-muted/50 border border-border/40"
+                              ? "bg-emerald-500 text-white ml-12" 
+                              : "bg-[#0B1117] border border-white/10"
                           }`}
                         >
                           {message.role === "assistant" ? (
@@ -542,20 +556,20 @@ export default function FarmersAssistantPage() {
       </div>
 
       {/* Input Area */}
-      <div className="border-t border-border/40 px-6 py-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="border-t border-white/10 px-6 py-4 bg-[#0B1117]/80 backdrop-blur">
         <div className="mx-auto max-w-4xl">
           {/* Current suggestions */}
           {currentSuggestions.length > 0 && !isLoading && (
             <div className="mb-3">
-              <div className="bg-accent/20 rounded-xl p-3 border border-border/40">
-                <p className="text-xs text-muted-foreground mb-2 font-medium">💡 Quick follow-ups:</p>
+              <div className="bg-[#0B1117]/50 rounded-xl p-3 border border-white/10">
+                <p className="text-xs text-slate-400 mb-2 font-medium">💡 Quick follow-ups:</p>
                 <div className="flex flex-wrap gap-2">
                   {currentSuggestions.map((suggestion, index) => (
                     <Button
                       key={index}
                       variant="secondary"
                       size="sm"
-                      className="text-xs h-auto py-1.5 px-3 hover:bg-secondary/80 rounded-lg"
+                      className="text-xs h-auto py-1.5 px-3 hover:bg-white/10 rounded-lg bg-white/5 border-white/10 text-slate-200"
                       onClick={() => handleSuggestionClick(suggestion)}
                     >
                       {suggestion.length > 45 ? `${suggestion.substring(0, 45)}...` : suggestion}
@@ -567,13 +581,13 @@ export default function FarmersAssistantPage() {
           )}
           
           {/* Input form */}
-          <div className="flex items-end gap-3 bg-background rounded-xl border border-border/40 p-3 shadow-sm">
+          <div className="flex items-end gap-3 bg-[#0B1117] rounded-xl border border-white/10 p-3 shadow-sm">
             <div className="flex-1">
               <Textarea
                 placeholder="Ask me anything about farming..."
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="min-h-[20px] max-h-[160px] resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 placeholder:text-muted-foreground/60"
+                className="min-h-[20px] max-h-[160px] resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 placeholder:text-slate-400 bg-transparent text-white"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault()
@@ -586,7 +600,7 @@ export default function FarmersAssistantPage() {
               type="submit" 
               size="icon" 
               disabled={isLoading || !prompt.trim()}
-              className="h-9 w-9 rounded-lg"
+              className="h-9 w-9 rounded-lg bg-emerald-500 hover:bg-emerald-600"
               onClick={handleSubmit}
             >
               {isLoading ? (
